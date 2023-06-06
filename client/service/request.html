@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Service</title>
+    <link rel="stylesheet" href="../styles/discover.css" type="text/css">
+</head>
+
+<body>
+
+    <div>
+
+        <!-- side bar -->
+
+        <!-- request -->
+        <div class="request">
+
+            <!-- breadcrumb -->
+            <div>
+                <p>Service</p>
+                <p> / </p>
+                <p>Service Request</p>
+            </div>
+
+            <!-- title-->
+            <h1>Discover</h1>
+
+            <div class="content">
+
+                <!-- request-container -->
+                <div>
+
+                    <!-- request table-->
+                    <table id="myTable">
+                        <thead>
+                            <tr>
+                                <th>Request ID</th>
+                                <th>Date</th>
+                                <th>Duration</th>
+                                <th>Volunteer Name</th>
+                                <th>Service Involved</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody">
+                            <!-- Data rows will be dynamically added here -->
+                        </tbody>
+                    </table>
+
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <!-- js for fetch data -->
+    <!-- // Fetch data from PHP backend
+    fetch('fetch_data.php')
+    .then(response => response.json())
+    .then(data => {
+    const tableBody = document.getElementById('tableBody');
+
+    // Iterate through the data and populate table rows
+    data.forEach(row => {
+    const newRow = document.createElement('tr');
+
+    // Iterate through each column in the row and create table cells
+    for (let i = 0; i < 7; i++) { const cell=document.createElement('td'); cell.textContent=row[i];
+        newRow.appendChild(cell); } tableBody.appendChild(newRow); }); }) .catch(error=> {
+        console.log('Error fetching data:', error);
+        }); -->
+
+</body>
+
+</html>
