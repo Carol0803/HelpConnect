@@ -1,0 +1,210 @@
+.history-container {
+    height: 85vh;
+    display: flex;
+    flex-direction: row;
+    margin: 10px 50px;
+}
+
+/* sidebar */
+.sidebar {
+    min-width: fit-content;
+    padding: 20px 0;
+    border-right: 1px solid var(--primary-color);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.sidebar a {
+    padding: 10px 50px 10px 10px;
+    background-color: transparent;
+    color: black;
+    text-align: left;
+    border-radius: 0;
+    font-size: 20px;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+.sidebar a.active {
+    background-color: var(--primary-color);
+    color: white;
+    text-align: left;
+}
+
+.history {
+    width: 100%;
+    margin: 10px 50px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* breadcrumb */
+.breadcrumb {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.breadcrumb a {
+    color: black;
+    text-decoration: none;
+}
+
+.history h1 {
+    margin: 0;
+}
+
+.content {
+    width: 100%;
+    margin: 10px 0;
+}
+
+/* request list */
+.table-container {
+    margin-top: 20px;
+}
+
+.history-table {
+    width: 100%;
+    background-color: white;
+    border: none;
+}
+
+.history-table th{
+    padding: 10px;
+}
+
+.table-body td {
+    padding: 10px;
+    text-align: center;
+}
+
+.table-head {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.table-button {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    margin: 0 20px;
+}
+
+.table-button button {
+    padding: 3px;
+    background-color: transparent;
+}
+
+.table-button button:hover {
+    background-color: var(--secondary-color);
+}
+
+/* service involved */
+.service {
+    margin: 0 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 7px;
+    margin: 5px;
+}
+
+.service p {
+    margin: 0;
+    padding: 0 5px;
+    border-radius: 10px;
+    width: fit-content;
+    background-color: gray;
+}
+
+/* star rating bar */
+.rate {
+    float: left;
+    height: 46px;
+    padding: 0 10px;
+}
+.rate:not(:checked) > input {
+    position:absolute;
+    top:-9999px;
+}
+.rate:not(:checked) > label {
+    float:right;
+    width:1em;
+    overflow:hidden;
+    white-space:nowrap;
+    cursor:pointer;
+    font-size:30px;
+    color:#ccc;
+}
+.rate:not(:checked) > label:before {
+    content: '★ ';
+}
+.rate > input:checked ~ label {
+    color: #ffc700;    
+}
+.rate:not(:checked) > label:hover,
+.rate:not(:checked) > label:hover ~ label {
+    color: #deb217;  
+}
+.rate > input:checked + label:hover,
+.rate > input:checked + label:hover ~ label,
+.rate > input:checked ~ label:hover,
+.rate > input:checked ~ label:hover ~ label,
+.rate > label:hover ~ input:checked ~ label {
+    color: #c59b08;
+}
+
+.rating-popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+  }
+  
+  .rating-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+  }
+  
+  .rate-popup {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .rate-popup input[type="radio"] {
+    display: none;
+  }
+  
+  .rate-popup label {
+    display: inline-block;
+    cursor: pointer;
+    color: #888;
+    font-size: 20px;
+    margin: 0 5px;
+  }
+  
+  .rate-popup label:hover,
+  .rate-popup label:hover ~ label {
+    color: #ffcc00;
+  }
+  
+  .rate-popup input[type="radio"]:checked ~ label {
+    color: #ffcc00;
+  }
+  
+  .rate-popup input[type="radio"]:checked + label:before {
+    content: "\2605"; /* Star symbol */
+  }
+  
