@@ -2,25 +2,26 @@
 // connect db
 include('../../database/connect.php');
 
-// retrieve user data based on the user ID from the URL parameter
-if (isset($_GET['userID'])) {
-    $userID = $_GET['userID'];
+// retrieve request based on the ID from the URL parameter
+if (isset($_GET['requestID'])) {
+    $requestID = $_GET['requestID'];
 
-    // retrieve volunteer data
-    $query = "SELECT * FROM user WHERE userID = '$userID'";
+    // retrieve request data
+    $query = "SELECT * FROM service_request WHERE requestID = '$requestID'";
     $result = mysqli_query($conn, $query);
 
     if ($result) {
         if (mysqli_num_rows($result) > 0) {
 
-            // retrieve volunteer data
             $row = mysqli_fetch_assoc($result);
-            $name = $row['firstname'] . ' ' . $row['lastname'];
-            $firstname = $row['firstname'];
-            $lastname = $row['lastname'];
+            $elderlyID = '1';
+            $volunteerID = $row['volunteer_involved'];
+            $service_datetime = $row['service_datetime'];
+            $duration = $row['duration'];
+            $description = $row['description'];
 
             // get user name
-            $query = "SELECT * FROM user WHERE userID = '1'";
+            $query = "SELECT * FROM user WHERE userID = '$elderlyID'";
             $result = mysqli_query($conn, $query);
 
             if ($result) {
@@ -33,13 +34,57 @@ if (isset($_GET['userID'])) {
                     echo "User not found";
                 }
                 mysqli_free_result($result);
+            } else {
+                echo "Error executing query: " . mysqli_error($conn);
+            }
 
+            // get volunteer name
+            $query = "SELECT * FROM user WHERE userID = '$volunteerID'";
+            $result = mysqli_query($conn, $query);
+
+            if ($result) {
+                if (mysqli_num_rows($result) > 0) {
+
+                    $row = mysqli_fetch_assoc($result);
+                    $volunteer_firstname = $row['firstname'];
+                    $volunteer_lastname = $row['lastname'];
+                } else {
+                    echo "User not found";
+                }
+                mysqli_free_result($result);
+            } else {
+                echo "Error executing query: " . mysqli_error($conn);
+            }
+
+            // retrieve service involved
+            $query = "SELECT * FROM service WHERE requestID = '$requestID'";
+            $result = mysqli_query($conn, $query);
+
+            if ($result) {
+                if (mysqli_num_rows($result) > 0) {
+
+                    $row = mysqli_fetch_assoc($result);
+                    $companionship = $row['companionship'];
+                    $counseling = $row['counseling'];
+                    $transportation = $row['transportation'];
+                    $respite_care = $row['respite_care'];
+                    $medical_care = $row['medical_care'];
+                    $hospice_care = $row['hospice_care'];
+                    $daily_living_assistance = $row['daily_living_assistance'];
+                } else {
+                    echo "User not found";
+                }
+
+                mysqli_free_result($result);
             } else {
                 echo "Error executing query: " . mysqli_error($conn);
             }
         } else {
             echo "User not found";
         }
+
+        // mysqli_free_result($result);
+
     } else {
         echo "Error executing query: " . mysqli_error($conn);
     }
@@ -60,41 +105,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $daily_living_assistance = isset($_POST['daily_living_assistance']) ? 1 : 0;
 
     $date = $_POST["service_datetime"];
-    // today's date
-    $createDate = date("Y-m-d");
     $duration = $_POST["duration"];
     $description = $_POST["description"];
-    $status = 'In Process';
 
-    // Create service request
-    $createServiceRequest = "INSERT INTO service_request (elderly_involved, volunteer_involved, create_datetime, service_datetime, duration, description, status)
-                    VALUES ('1', '$userID', '$createDate', '$date', '$duration', '$description', '$status')";
+    // Update service request
+    $updateServiceRequest = "UPDATE service_request 
+                            SET service_datetime = '$date', duration = '$duration', description = '$description'
+                            WHERE requestID = '$requestID'";
 
-    if (mysqli_query($conn, $createServiceRequest)) {
+    if (mysqli_query($conn, $updateServiceRequest)) {
 
-        // Get the ID of the created record
-        $serviceRequestId = mysqli_insert_id($conn);
+        // Update service involved
+        $updateServiceInvolved = "UPDATE service
+                                SET companionship = '$companionship', counseling = '$counseling', transportation = '$transportation' , 
+                                respite_care = '$respite_care', medical_care = '$medical_care', hospice_care = '$hospice_care', daily_living_assistance = '$daily_living_assistance'
+                                WHERE requestID = '$requestID'";
 
-        // Create service involved
-        $createServiceInvolved = "INSERT INTO service (companionship, counseling, transportation, respite_care, medical_care, hospice_care, daily_living_assistance, requestID)
-    VALUES ('$companionship','$counseling','$transportation','$respite_care','$medical_care','$hospice_care','$daily_living_assistance','$serviceRequestId')";
+        if (mysqli_query($conn, $updateServiceInvolved)) {
 
-        if (mysqli_query($conn, $createServiceInvolved)) {
-
-            // Get the ID of the created service
-            $serviceId = mysqli_insert_id($conn);
-
-            // Update data in service_request table
-            $updateServiceRequest = "UPDATE service_request SET service_involved = '$serviceId' WHERE requestID = '$serviceRequestId'";
-
-            if (mysqli_query($conn, $updateServiceRequest)) {
-
-                echo "Service request updated in the database.";
-            } else {
-                echo "Error updating service request: " . mysqli_error($conn);
-            }
-
-            echo '<script>alert("Request created.");</script>';
+            echo '<script>alert("Request updated.");</script>';
             echo '<script>window.location.href = "request.php";</script>';
             exit;
         } else {
@@ -144,8 +173,8 @@ mysqli_close($conn);
 
         <!-- side bar -->
         <div class="sidebar">
-            <a href="discover.php" class="active">Discover</a>
-            <a href="request.php">Service Request</a>
+            <a href="discover.php">Discover</a>
+            <a href="request.php" class="active">Service Request</a>
             <a href="history.php">History</a>
         </div>
 
@@ -153,7 +182,7 @@ mysqli_close($conn);
         <div class="create-request">
 
             <!-- back button -->
-            <a href="discover-profile.php?userID=<?php echo $userID; ?>" class="back-button">
+            <a href="request.php" class="back-button">
                 <span>
                     < Back</span>
             </a>
@@ -162,21 +191,17 @@ mysqli_close($conn);
             <div class="breadcrumb">
                 <a href="discover.php">Service</a>
                 <strong> / </strong>
-                <a href="discover.php">Discover</a>
+                <a href="request.php">Service Request</a>
                 <strong> / </strong>
-                <a href="discover-profile.php?userID=<?php echo $userID; ?>">
-                    <?php echo $name; ?>
-                </a>
-                <strong> / </strong>
-                <a href="#">Create Service Request</a>
+                <a href="#">Edit Service Request</a>
             </div>
 
             <!-- title-->
-            <h1>Create Service Request</h1>
+            <h1>Edit Service Request</h1>
 
             <div class="content">
 
-                <form id="serviceRequestForm" method="POST" onsubmit="return validateForm()">
+                <form id="serviceRequestForm" method="POST" oninput="toggleSubmitButton()">
 
                     <!-- request by -->
                     <label>Request by:</label><br>
@@ -188,46 +213,46 @@ mysqli_close($conn);
                     <!-- request to -->
                     <label>Request to:</label><br>
                     <div class="to">
-                        <input type="text" placeholder="<?php echo $firstname; ?>" disabled><br>
-                        <input type="text" placeholder="<?php echo $lastname; ?>" disabled><br>
+                        <input type="text" placeholder="<?php echo $volunteer_firstname; ?>" disabled><br>
+                        <input type="text" placeholder="<?php echo $volunteer_lastname; ?>" disabled><br>
                     </div>
 
                     <!-- date -->
                     <label for="service_datetime">Date:</label>
-                    <input type="datetime-local" id="service_datetime" name="service_datetime" placeholder="Date">
+                    <input type="datetime-local" id="service_datetime" name="service_datetime" value="<?php echo $service_datetime; ?>">
 
                     <!-- duration -->
                     <label for="duration">Duration(hours): </label>
-                    <input type="number" id="duration" name="duration" placeholder="Duration">
+                    <input type="number" id="duration" name="duration" value="<?php echo $duration; ?>">
 
                     <!-- service type -->
                     <label for="service_involved ">Service Type: </label>
                     <div class="checkbox">
-                        <input type="checkbox" id="companionship" name="companionship" value="1">
+                        <input type="checkbox" id="companionship" name="companionship" value="1" <?php if ($companionship == 1) echo "checked"; ?>>
                         <label for="companionship">Companionship</label><br>
 
-                        <input type="checkbox" id="daily_living_assistance" name="daily_living_assistance" value="1">
+                        <input type="checkbox" id="daily_living_assistance" name="daily_living_assistance" value="1" <?php if ($daily_living_assistance == 1) echo "checked"; ?>>
                         <label for="daily_living_assistance">Daily Living Assistance</label><br>
 
-                        <input type="checkbox" id="medical_care" name="medical_care" value="1">
+                        <input type="checkbox" id="medical_care" name="medical_care" value="1" <?php if ($medical_care == 1) echo "checked"; ?>>
                         <label for="medical_care">Medical care</label><br>
 
-                        <input type="checkbox" id="transportation" name="transportation" value="1">
+                        <input type="checkbox" id="transportation" name="transportation" value="1" <?php if ($transportation == 1) echo "checked"; ?>>
                         <label for="transportation">Transportation</label><br>
 
-                        <input type="checkbox" id="counseling" name="counseling" value="1">
+                        <input type="checkbox" id="counseling" name="counseling" value="1" <?php if ($counseling == 1) echo "checked"; ?>>
                         <label for="counseling">Counseling</label><br>
 
-                        <input type="checkbox" id="hospice_care" name="hospice_care" value="1"">
+                        <input type="checkbox" id="hospice_care" name="hospice_care" value="1" <?php if ($hospice_care == 1) echo "checked"; ?>>
                         <label for=" hospice_care">Hospice care</label><br>
 
-                        <input type="checkbox" id="respite_care" name="respite_care" value="1">
+                        <input type="checkbox" id="respite_care" name="respite_care" value="1" <?php if ($respite_care == 1) echo "checked"; ?>>
                         <label for="respite_care">Respite care</label><br>
                     </div>
 
                     <!-- decription -->
                     <label for="description">Description</label><br>
-                    <textarea id="description" name="description" rows="4" cols="50"></textarea>
+                    <textarea id="description" name="description" rows="4" cols="50"><?php echo $description; ?></textarea>
 
                     <!-- rewards -->
                     <input type="checkbox" id="payCheckbox" name="payCheckbox" value="pay" onchange="togglePaymentInput()">
@@ -253,17 +278,6 @@ mysqli_close($conn);
 </body>
 
 <script>
-    // event listeners for form inputs
-    document.getElementById('duration').addEventListener('input', validateForm);
-    document.getElementById('service_datetime').addEventListener('input', validateForm);
-    document.getElementById('description').addEventListener('input', validateForm);
-    var checkboxes = document.querySelectorAll('input[type="checkbox"]');
-    checkboxes.forEach(function(checkbox) {
-        checkbox.addEventListener('change', validateForm);
-    });
-
-    validateForm();
-
     function togglePaymentInput() {
         var payCheckbox = document.getElementById('payCheckbox');
         var paymentInput = document.getElementById('paymentInput');
@@ -276,21 +290,23 @@ mysqli_close($conn);
     }
 
     function goBack() {
-        var userID = <?php echo $userID; ?>;
-        window.location.href = "discover-profile.php?userID=" + userID;
+        window.location.href = "request.php";
     }
 
-    function validateForm() {
-        var duration = document.getElementById('duration').value;
-        var service_datetime = document.getElementById('service_datetime').value;
-        var checkboxes = document.querySelectorAll('input[type="checkbox"]:checked');
-        var description = document.getElementById('description').value;
+    function toggleSubmitButton() {
+        var submitButton = document.getElementById('submitButton');
+        submitButton.disabled = false; // Enable the submit button
 
-        var isValid = duration !== "" && service_datetime !== "" && checkboxes.length > 0 && description !== "";
+        var formInputs = document.querySelectorAll('#serviceRequestForm input, #serviceRequestForm textarea');
+        for (var i = 0; i < formInputs.length; i++) {
+            if (formInputs[i].defaultValue !== formInputs[i].value) {
+                // Changes detected, keep the submit button enabled
+                return;
+            }
+        }
 
-        document.getElementById('submitButton').disabled = !isValid;
-
-        return isValid;
+        // No changes detected, disable the submit button
+        submitButton.disabled = true;
     }
 </script>
 

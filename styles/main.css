@@ -66,12 +66,12 @@ input[type="checkbox"] {
 }
 
 input[disabled] {
-    background-color: #D9D9D9; 
+    background-color: #D9D9D9;
     color: #D9D9D9;
     border: 1px solid #cccccc;
-    cursor: not-allowed; 
-  }
-  
+    cursor: not-allowed;
+}
+
 
 /* Responsive design */
 @media (max-width: 768px) {

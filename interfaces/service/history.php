@@ -86,6 +86,7 @@
                             if (mysqli_num_rows($result) > 0) {
 
                                 while ($row = mysqli_fetch_assoc($result)) {
+
                                     echo '<tr>';
                                     echo '<td>' . $row['requestID'] . '</td>';
                                     $serviceDatetime = date('Y-m-d h:i A', strtotime($row['service_datetime']));
@@ -139,7 +140,27 @@
                                     echo '<td>';
                                     if ($row['user_rating'] == 0) {
                                         echo '<button id="rateButton" class="rate-button" onclick="openRatingPopup()">Rate</button>';
-                                        // echo '<button class="rate-button" onclick="openRatingPopup(' . $row['requestID'] . ')">Rate</button>';
+
+                                        // Update service rating
+                                        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+                                            // Get the rating value from the request
+                                            $rating = $_POST['rate-popup'];
+
+                                            $updateServiceInvolved = "UPDATE service_request
+                                                                    SET user_rating = '$rating'
+                                                                    WHERE requestID = '$requestID'";
+
+                                            if (mysqli_query($conn, $updateServiceInvolved)) {
+
+                                                echo '<script>alert("Rating recorded.");</script>';
+                                                // header("Location: " . $_SERVER['PHP_SELF']);
+                                                // exit();
+
+                                            } else {
+                                                echo "Error storing service request: " . mysqli_error($conn);
+                                            }
+                                        }
                                     } else {
                                         echo '<div class="rate">';
                                         echo '<input type="radio" id="star5" name="rate" value="5" ' . ($row['user_rating'] == 5 ? 'checked' : '') . ' disabled />';
@@ -152,7 +173,6 @@
                                         echo '<label for="star2" title="text">2 stars</label>';
                                         echo '<input type="radio" id="star1" name="rate" value="1" ' . ($row['user_rating'] == 1 ? 'checked' : '') . ' disabled />';
                                         echo '<label for="star1" title="text">1 star</label>';
-                                        echo '<span id="selectedRating">' . $row['user_rating'] . ' stars</span>';
                                         echo '</div>';
                                     }
                                     echo '</td>';
@@ -162,7 +182,6 @@
                                 // No rows found in the database
                                 echo '<tr><td colspan="7">No data available</td></tr>';
                             }
-
 
                             // close connection
                             mysqli_free_result($result);
@@ -178,26 +197,30 @@
     </div>
 
     <!-- Rating Popup -->
-    <div class="rating-popup" id="ratingPopup">
-        <div class="rating-content">
-            <button class="close-button" onclick="closeRatingPopup()">Close</button> <!-- Add this line -->
-            <h2>Rate the Service</h2>
-            <div class="rate-popup">
-                <input type="radio" id="rate5" name="rate-popup" value="5" />
-                <label for="rate5" title="text">5 stars</label>
-                <input type="radio" id="rate4" name="rate-popup" value="4" />
-                <label for="rate4" title="text">4 stars</label>
-                <input type="radio" id="rate3" name="rate-popup" value="3" />
-                <label for="rate3" title="text">3 stars</label>
-                <input type="radio" id="rate2" name="rate-popup" value="2" />
-                <label for="rate2" title="text">2 stars</label>
-                <input type="radio" id="rate1" name="rate-popup" value="1" />
-                <label for="rate1" title="text">1 star</label>
+    <form method="POST">
+        <div class="rating-popup" id="ratingPopup">
+            <div class="rating-content">
+                <div class="rate-head">
+                    <h2>Rate the Service</h2>
+                </div>
+                <div class="rate-popup">
+                    <input type="radio" id="rate5" name="rate-popup" value="5" />
+                    <label for="rate5" title="text">5 stars</label>
+                    <input type="radio" id="rate4" name="rate-popup" value="4" />
+                    <label for="rate4" title="text">4 stars</label>
+                    <input type="radio" id="rate3" name="rate-popup" value="3" />
+                    <label for="rate3" title="text">3 stars</label>
+                    <input type="radio" id="rate2" name="rate-popup" value="2" />
+                    <label for="rate2" title="text">2 stars</label>
+                    <input type="radio" id="rate1" name="rate-popup" value="1" />
+                    <label for="rate1" title="text">1 star</label>
+                </div>
+                <button type="submit" class="rate-submit" name="submitRating">Confirm</button>
+                <button class="rate-cancel" onclick="closeRatingPopup()">Cancel</button>
             </div>
-            <button onclick="submitRating()">Submit</button>
-            <button onclick="closeRatingPopup()">Cancel</button>
         </div>
-    </div>
+    </form>
+
 
 
     <!-- Footer -->
@@ -215,44 +238,6 @@
     function closeRatingPopup() {
         const ratingPopup = document.getElementById('ratingPopup');
         ratingPopup.style.display = 'none';
-    }
-
-    function submitRating() {
-        const ratingInputs = document.querySelectorAll('.rating-popup input[name="rate-popup"]');
-        let selectedRating = 0;
-        ratingInputs.forEach(input => {
-            if (input.checked) {
-                selectedRating = input.value;
-            }
-        });
-
-        // Perform the rating submission logic here
-        // ...
-
-        // Simulating a successful submission
-        setTimeout(() => {
-            const rateButton = document.getElementById('rateButton');
-            const ratingBar = document.createElement('div');
-            ratingBar.classList.add('rate');
-            ratingBar.innerHTML = `
-            <input type="radio" id="star5" name="rate" value="5" ${selectedRating === '5' ? 'checked' : ''} />
-            <label for="star5" title="text">5 stars</label>
-            <input type="radio" id="star4" name="rate" value="4" ${selectedRating === '4' ? 'checked' : ''} />
-            <label for="star4" title="text">4 stars</label>
-            <input type="radio" id="star3" name="rate" value="3" ${selectedRating === '3' ? 'checked' : ''} />
-            <label for="star3" title="text">3 stars</label>
-            <input type="radio" id="star2" name="rate" value="2" ${selectedRating === '2' ? 'checked' : ''} />
-            <label for="star2" title="text">2 stars</label>
-            <input type="radio" id="star1" name="rate" value="1" ${selectedRating === '1' ? 'checked' : ''} />
-            <label for="star1" title="text">1 star</label>
-            <span id="selectedRating">${selectedRating} stars</span>
-        `;
-            rateButton.parentNode.replaceChild(ratingBar, rateButton);
-
-            closeRatingPopup();
-
-            location.reload();
-        }, 2000); // Delay added for demonstration purposes
     }
 </script>
 

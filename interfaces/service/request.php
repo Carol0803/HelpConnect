@@ -74,6 +74,7 @@
                         <tbody class="table-body">
 
                             <?php
+
                             // connect db
                             include('../../database/connect.php');
 
@@ -136,17 +137,48 @@
                                     echo '<td>' . $row['status'] . '</td>';
                                     echo '<td>';
                                     echo '<div class="table-button">';
-                                    echo '<button><img src="../../assets/icon-edit.svg" alt="Edit" /></button>';
-                                    echo '<button><img src="../../assets/icon-delete.svg" alt="Delete" /></button>';
+                                    echo '<button><a href="request-edit.php?requestID=' . $requestID . '"><img src="../../assets/icon-edit.svg" alt="Edit" /></a></button>';
+                                    echo '<form method="post" action="">';
+                                    echo '<button type="submit" name="deleteBtn"><img src="../../assets/icon-delete.svg" alt="Delete" /></button>';
+                                    echo '</form>';
                                     echo '</div>';
                                     echo '</td>';
                                     echo '</tr>';
+
+                                    // delete request
+                                    if (isset($_POST['deleteBtn'])) {
+
+                                        mysqli_query($conn, "SET FOREIGN_KEY_CHECKS = 0");
+
+
+                                        // delete service_involved
+                                        $deleteServiceQuery = "DELETE FROM service WHERE requestID = '$requestID'";
+                                        $deleteServiceResult = mysqli_query($conn, $deleteServiceQuery);
+
+                                        if ($deleteServiceResult) {
+
+                                            // delete service request
+                                            $deleteQuery = "DELETE FROM service_request WHERE requestID = '$requestID'";
+                                            $deleteResult = mysqli_query($conn, $deleteQuery);
+
+                                            if ($deleteResult) {
+
+                                                header("Location: " . $_SERVER['PHP_SELF']);
+                                                exit();
+
+                                            } else {
+                                                echo "Error deleting data row: " . mysqli_error($conn);
+                                            }
+                                        } else {
+                                            echo "Error deleting data row: " . mysqli_error($conn);
+                                        }
+
+                                        mysqli_query($conn, "SET FOREIGN_KEY_CHECKS = 1");
+                                    }
                                 }
                             } else {
-                                // No rows found in the database
                                 echo '<tr><td colspan="7">No data available</td></tr>';
                             }
-
 
                             // close connection
                             mysqli_free_result($result);
@@ -155,8 +187,6 @@
 
                         </tbody>
                     </table>
-
-
                 </div>
             </div>
         </div>
@@ -166,24 +196,6 @@
     <div class="footer">
         <p>©2023 HelpConnect. All right reserved.</p>
     </div>
-
-    <!-- js for fetch data -->
-    <!-- // Fetch data from PHP backend
-    fetch('fetch_data.php')
-    .then(response => response.json())
-    .then(data => {
-    const tableBody = document.getElementById('tableBody');
-
-    // Iterate through the data and populate table rows
-    data.forEach(row => {
-    const newRow = document.createElement('tr');
-
-    // Iterate through each column in the row and create table cells
-    for (let i = 0; i < 7; i++) { const cell=document.createElement('td'); cell.textContent=row[i];
-        newRow.appendChild(cell); } tableBody.appendChild(newRow); }); }) .catch(error=> {
-        console.log('Error fetching data:', error);
-        }); -->
-
 </body>
 
 </html>
