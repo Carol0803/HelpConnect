@@ -53,6 +53,8 @@ input[type="text"],
 input[type="email"],
 input[type="date"],
 input[type="number"],
+input[type="password"],
+input[type="select"],
 textarea {
     width: 100%;
     padding: 10px;
