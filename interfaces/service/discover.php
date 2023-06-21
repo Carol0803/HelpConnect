@@ -6,6 +6,8 @@
 
     <!-- import custom css -->
     <link rel="stylesheet" href="../../styles/main.css" type="text/css">
+    <link rel="stylesheet" href="../../styles/header.css" type="text/css">
+    <link rel="stylesheet" href="../../styles/footer.css" type="text/css">
     <link rel="stylesheet" href="../../styles/discover.css" type="text/css">
 
     <!-- import script -->
@@ -15,22 +17,8 @@
 <body>
 
     <!-- header -->
-    <div class="header">
-        <img src="../../assets/logo.svg" alt="logo" height="55px">
+    <?php include('../authentication/header.php') ?>
 
-        <!-- menu -->
-        <div class="menu">
-            <a href="">Home</a>
-            <a href="#" class="active">Service</a>
-            <a href="">Community</a>
-            <a href="">Profile</a>
-        </div>
-
-        <!-- avatar -->
-        <button class="avatar-button" id="" type="button">
-            <span class="avatar-text">DJ</span>
-        </button>
-    </div>
 
     <div class="discover-container">
 
@@ -165,9 +153,7 @@
     </div>
 
     <!-- Footer -->
-    <div class="footer">
-        <p>©2023 HelpConnect. All right reserved.</p>
-    </div>
+    <?php include('../authentication/footer.php') ?>
 </body>
 
 </html>
