@@ -99,6 +99,16 @@ mysqli_close($conn);
          document.getElementById('signupForm').submit(event);
       }
 
+      function validateEmail() {
+         var emailInput = document.getElementById('email');
+         var emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+         if (!emailPattern.test(emailInput.value)) {
+            alert('Please enter a valid email address.');
+            return false; // Prevent form submission
+         }
+      }
+
 
       // function onClick() {
       //    document.getElementById('signupForm').submit();
@@ -166,7 +176,7 @@ mysqli_close($conn);
                   <label for="female">Female</label><br>
                </div>
             </div>
-            <input type="email" name="email" placeholder="Email Address" required class="box">
+            <input type="email" name="email" id="email" placeholder="Email Address" required class="box" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}">
             <input type="number" name="contactno" placeholder="Contact No." required class="box">
             <div class="birth-date">
                <p class="birth-date-label">Birth Date:</p>
@@ -174,7 +184,7 @@ mysqli_close($conn);
             </div>
 
             <div class="button">
-               <button onclick="toggleNext()">Next</button>
+               <button onclick="validateEmail()">Next</button>
             </div>
          </div>
 

@@ -35,7 +35,7 @@
 
 /* dashboard */
 .dashboard .box-container{
-    padding: 27px 100px;
+    padding: 23px 100px;
     display: flex;
     flex-direction: row;
     height: 100%;

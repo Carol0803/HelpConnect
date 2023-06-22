@@ -17,7 +17,7 @@
 
             <!-- menu -->
             <nav class="menu">
-                <a href="home.php">Home</a>
+                <a href="../business-info/aboutUs.php">Home</a>
                 <a href="#" class="active">Service</a>
                 <a href="">Community</a>
                 <a href="">Profile</a>
