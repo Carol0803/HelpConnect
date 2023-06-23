@@ -35,7 +35,7 @@
 
 /* dashboard */
 .dashboard .box-container{
-    padding: 23px 100px;
+    padding: 27px 100px;
     display: flex;
     flex-direction: row;
     height: 100%;
@@ -50,7 +50,7 @@
 }
 
 .dashboard .box p {
-    font-size: 25px;
+    font-size: 20px !important;
     text-align: justify;
 }
  
@@ -62,8 +62,6 @@
 .login-button {
     background-color: black;
 }
-
-
 
 /* footer */
 .footer p {

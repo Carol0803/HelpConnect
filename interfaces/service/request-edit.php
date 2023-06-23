@@ -1,4 +1,17 @@
 <?php
+
+include('../../database/connect.php');
+
+session_start();
+
+$id = $_SESSION['id'];
+$email = $_SESSION['email'];
+$this_user_role = $_SESSION['role'];
+$name = $_SESSION['name'];
+
+?>
+
+<?php
 // connect db
 include('../../database/connect.php');
 
@@ -14,7 +27,7 @@ if (isset($_GET['requestID'])) {
         if (mysqli_num_rows($result) > 0) {
 
             $row = mysqli_fetch_assoc($result);
-            $elderlyID = '1';
+            $elderlyID = $id;
             $volunteerID = $row['volunteer_involved'];
             $service_datetime = $row['service_datetime'];
             $duration = $row['duration'];
@@ -146,28 +159,48 @@ mysqli_close($conn);
 
     <!-- import custom css -->
     <link rel="stylesheet" href="../../styles/main.css" type="text/css">
+    <link rel="stylesheet" href="../../styles/header.css" type="text/css">
+    <link rel="stylesheet" href="../../styles/footer.css" type="text/css">
     <link rel="stylesheet" href="../../styles/create.css" type="text/css">
+
+    <script>
+        function toggleAvatar() {
+            var userDetails = document.getElementById("userDetails");
+            userDetails.style.display = (userDetails.style.display === "block") ? "none" : "block";
+        }
+    </script>
 </head>
 
 <body>
 
     <!-- header -->
-    <div class="header">
-        <img src="../../assets/logo.svg" alt="logo" height="55px">
+    <header>
+        <div class="header">
+            <img src="../../assets/logo.svg" alt="logo" height="55px">
 
-        <!-- menu -->
-        <div class="menu">
-            <a href="">Home</a>
-            <a href="#" class="active">Service</a>
-            <a href="">Community</a>
-            <a href="">Profile</a>
+            <!-- menu -->
+            <nav class="menu">
+                <a href="../../interfaces/business-info/aboutUs.php">Home</a>
+                <a href="#" class="active">Service</a>
+                <a href="../../interfaces/community/community.php">Community</a>
+                <a href="../../interfaces/profile/userProfile.php">Profile</a>
+            </nav>
+
+            <button class="avatar-button fas" type="button" onclick="toggleAvatar()">
+                <img src="../../assets/profile-icon.svg" alt="profile" class="avatar-text">
+            </button>
+
+            <!-- User Details Box -->
+            <div id="userDetails" class="user-box">
+                <p class="role" style="text-transform: capitalize;"><?php echo $this_user_role; ?></p>
+                <p><strong>Username: </strong><?php echo $name; ?></p>
+                <p><strong>Email: </strong><?php echo $email; ?></p>
+                <button><a href="../authentication/logout.php" style="text-decoration: none; color: white;">Logout</a></button>
+
+            </div>
         </div>
 
-        <!-- avatar -->
-        <button class="avatar-button" id="" type="button">
-            <span class="avatar-text">DJ</span>
-        </button>
-    </div>
+    </header>
 
     <div class="create-request-container">
 
@@ -261,7 +294,7 @@ mysqli_close($conn);
 
                     <!-- btn -->
                     <div class="button">
-                        <button type="submit" id="submitButton" class="send" form="serviceRequestForm" disabled>Send</button>
+                        <button type="submit" id="submitButton" class="send" form="serviceRequestForm" disabled>Save</button>
                         <button type="button" class="cancel" onclick="goBack()">Cancel</button>
                     </div>
 
@@ -272,9 +305,7 @@ mysqli_close($conn);
     </div>
 
     <!-- Footer -->
-    <div class="footer">
-        <p>©2023 HelpConnect. All right reserved.</p>
-    </div>
+    <?php include('../authentication/footer.php') ?>
 </body>
 
 <script>

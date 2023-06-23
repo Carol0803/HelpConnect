@@ -1,19 +1,33 @@
+<?php
+
+include('../../database/connect.php');
+
+session_start();
+
+$id = $_SESSION['id'];
+$email = $_SESSION['email'];
+$role = $_SESSION['role'];
+$name = $_SESSION['name'];
+
+?>
+
 <!DOCTYPE html>
 <html>
 
 <head>
     <title>Mission & Goal</title>
+
     <!-- import custom css -->
     <link rel="stylesheet" href="../../styles/main.css" type="text/css">
     <link rel="stylesheet" href="../../styles/header.css" type="text/css">
     <link rel="stylesheet" href="../../styles/footer.css" type="text/css">
-    <link rel="stylesheet" href="../../styles/missionGoal.css">
+    <link rel="stylesheet" href="../../styles/missionGoal.css" type="text/css">
 
     <script>
-        // function toggleAvatar() {
-        //     var userDetails = document.getElementById("userDetails");
-        //     userDetails.style.display = (userDetails.style.display === "block") ? "none" : "block";
-        // }
+        function toggleAvatar() {
+            var userDetails = document.getElementById("userDetails");
+            userDetails.style.display = (userDetails.style.display === "block") ? "none" : "block";
+        }
     </script>
 </head>
 
@@ -28,20 +42,20 @@
             <nav class="menu">
                 <a href="#" class="active">Home</a>
                 <a href="../../interfaces/service/discover.php">Service</a>
-                <a href="">Community</a>
-                <a href="">Profile</a>
+                <a href="../../interfaces/community/community.php">Community</a>
+                <a href="../../interfaces/profile/userProfile.php">Profile</a>
             </nav>
-
+            
             <button class="avatar-button fas" type="button" onclick="toggleAvatar()">
-                <span class="avatar-text">DJ</span>
+            <img src="../../assets/profile-icon.svg" alt="profile" class="avatar-text">
             </button>
 
             <!-- User Details Box -->
             <div id="userDetails" class="user-box">
-                <p class="role">Elderly</p>
-                <p><strong>Username: </strong> John Doe</p>
-                <p><strong>Email: </strong> johndoe@example.com</p>
-                <button><a href="./authentication/logout.php"></a>Logout</button>
+                <p class="role" style="text-transform: capitalize;"><?php echo $role; ?></p>
+                <p><strong>Username: </strong><?php echo $name; ?></p>
+                <p><strong>Email: </strong><?php echo $email; ?></p>
+                <button><a href="../authentication/logout.php" style="text-decoration: none; color: white;">Logout</a></button>
             </div>
         </div>
 

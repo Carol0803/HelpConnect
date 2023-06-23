@@ -1,4 +1,17 @@
 <?php
+
+include('../../database/connect.php');
+
+session_start();
+
+$id = $_SESSION['id'];
+$email = $_SESSION['email'];
+$this_user_role = $_SESSION['role'];
+$name = $_SESSION['name'];
+
+?>
+
+<?php
 // connect db
 include('../../database/connect.php');
 
@@ -20,7 +33,7 @@ if (isset($_GET['userID'])) {
             $gender = $row['gender'];
             $location = $row['city'] . ', ' . $row['state'];
             $skills = $row['skill'];
-            $rating = $row['rating'];
+            // $rating = $row['rating'];
         } else {
             // No user found with the provided ID
             echo "User not found";
@@ -49,28 +62,48 @@ mysqli_close($conn);
 
     <!-- import custom css -->
     <link rel="stylesheet" href="../../styles/main.css" type="text/css">
+    <link rel="stylesheet" href="../../styles/header.css" type="text/css">
+    <link rel="stylesheet" href="../../styles/footer.css" type="text/css">
     <link rel="stylesheet" href="../../styles/profile.css" type="text/css">
+
+    <script>
+        function toggleAvatar() {
+            var userDetails = document.getElementById("userDetails");
+            userDetails.style.display = (userDetails.style.display === "block") ? "none" : "block";
+        }
+    </script>
 </head>
 
 <body>
 
     <!-- header -->
-    <div class="header">
-        <img src="../../assets/logo.svg" alt="logo" height="55px">
+    <header>
+        <div class="header">
+            <img src="../../assets/logo.svg" alt="logo" height="55px">
 
-        <!-- menu -->
-        <div class="menu">
-            <a href="">Home</a>
-            <a href="#" class="active">Service</a>
-            <a href="">Community</a>
-            <a href="">Profile</a>
+            <!-- menu -->
+            <nav class="menu">
+                <a href="../../interfaces/business-info/aboutUs.php">Home</a>
+                <a href="#" class="active">Service</a>
+                <a href="../../interfaces/community/community.php">Community</a>
+                <a href="../../interfaces/profile/userProfile.php">Profile</a>
+            </nav>
+
+            <button class="avatar-button fas" type="button" onclick="toggleAvatar()">
+                <img src="../../assets/profile-icon.svg" alt="profile" class="avatar-text">
+            </button>
+
+            <!-- User Details Box -->
+            <div id="userDetails" class="user-box">
+                <p class="role" style="text-transform: capitalize;"><?php echo $this_user_role; ?></p>
+                <p><strong>Username: </strong><?php echo $name; ?></p>
+                <p><strong>Email: </strong><?php echo $email; ?></p>
+                <button><a href="../authentication/logout.php" style="text-decoration: none; color: white;">Logout</a></button>
+
+            </div>
         </div>
 
-        <!-- avatar -->
-        <button class="avatar-button" id="" type="button">
-            <span class="avatar-text">DJ</span>
-        </button>
-    </div>
+    </header>
 
     <div class="profile-container">
 
@@ -92,11 +125,11 @@ mysqli_close($conn);
 
             <!-- breadcrumb -->
             <div class="breadcrumb">
-                <a href="#">Service</a>
+                <a href="discover.php">Service</a>
                 <strong> / </strong>
                 <a href="discover.php">Discover</a>
                 <strong> / </strong>
-                <a href="#"><?php echo $name; ?></a>
+                <a href="#"><strong><?php echo $name; ?></strong></a>
             </div>
 
             <div class="content">
@@ -112,7 +145,7 @@ mysqli_close($conn);
                             <h1><?php echo $name; ?></h1>
 
                             <!-- rating -->
-                            <div class="rate">
+                            <!-- <div class="rate">
                                 <input type="radio" id="star5" name="rate" value="5" <?php echo ($rating == 5) ? 'checked' : ''; ?> disabled />
                                 <label for="star5" title="text">5 stars</label>
                                 <input type="radio" id="star4" name="rate" value="4" <?php echo ($rating == 4) ? 'checked' : ''; ?> disabled />
@@ -123,19 +156,19 @@ mysqli_close($conn);
                                 <label for="star2" title="text">2 stars</label>
                                 <input type="radio" id="star1" name="rate" value="1" <?php echo ($rating == 1) ? 'checked' : ''; ?> disabled />
                                 <label for="star1" title="text">1 star</label>
-                            </div>
+                            </div> -->
 
                         </div>
 
 
-                        <h3>Age: <?php echo $birthdate; ?></h3>
-                        <h3>Gender: <?php echo $gender; ?></h3>
-                        <h3>Location: <?php echo $location; ?></h3>
-                        <h3>Skills/Specialty: <?php echo $skills; ?></h3>
+                        <h3><strong>Age: </strong> <?php echo $birthdate; ?></h3>
+                        <h3><strong>Gender: </strong> <?php echo $gender; ?></h3>
+                        <h3><strong>Location: </strong><?php echo $location; ?></h3>
+                        <h3><strong>Skills/Specialty: </strong><?php echo $skills; ?></h3>
 
                         <!-- service list -->
                         <div class="service-list">
-                            <h3>Service Offered: </h3>
+                            <h3><strong>Service Offered: </strong></h3>
 
                             <!-- retrieve service -->
                             <?php
@@ -172,9 +205,11 @@ mysqli_close($conn);
                     <div class="action-btn">
                         <img src="" alt="user-img">
                         <button class="follow">Follow</button>
-                        <a href="request-create.php?userID=<?php echo $userID; ?>">
-                            <button class="book">Book Service</button>
-                        </a>
+                        <?php if ($this_user_role !== "volunteer") : ?>
+                            <a href="request-create.php?userID=<?php echo $userID; ?>">
+                                <button class="book">Book Service</button>
+                            </a>
+                        <?php endif; ?>
                     </div>
                 </div>
 
@@ -233,7 +268,6 @@ mysqli_close($conn);
                                         }
                                         echo '</div>';
                                         echo '</td>';
-
                                     } else {
                                         // No rows found in the database
                                         echo '<tr><td colspan="7">No data available</td></tr>';
@@ -266,9 +300,7 @@ mysqli_close($conn);
     </div>
 
     <!-- Footer -->
-    <div class="footer">
-        <p>©2023 HelpConnect. All right reserved.</p>
-    </div>
+    <?php include('../authentication/footer.php') ?>
 
 </body>
 

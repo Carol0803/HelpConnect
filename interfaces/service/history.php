@@ -1,3 +1,16 @@
+<?php
+
+include('../../database/connect.php');
+
+session_start();
+
+$id = $_SESSION['id'];
+$email = $_SESSION['email'];
+$this_user_role = $_SESSION['role'];
+$name = $_SESSION['name'];
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -6,32 +19,49 @@
 
     <!-- import custom css -->
     <link rel="stylesheet" href="../../styles/main.css" type="text/css">
+    <link rel="stylesheet" href="../../styles/header.css" type="text/css">
+    <link rel="stylesheet" href="../../styles/footer.css" type="text/css">
     <link rel="stylesheet" href="../../styles/history.css" type="text/css">
 
-    <!-- import script -->
-    <script src="../../scripts/history.js"></script>
+    <script>
+        function toggleAvatar() {
+            var userDetails = document.getElementById("userDetails");
+            userDetails.style.display = (userDetails.style.display === "block") ? "none" : "block";
+        }
+    </script>
 
 </head>
 
 <body>
 
     <!-- header -->
-    <div class="header">
-        <img src="../../assets/logo.svg" alt="logo" height="55px">
+    <header>
+        <div class="header">
+            <img src="../../assets/logo.svg" alt="logo" height="55px">
 
-        <!-- menu -->
-        <div class="menu">
-            <a href="">Home</a>
-            <a href="#" class="active">Service</a>
-            <a href="">Community</a>
-            <a href="">Profile</a>
+            <!-- menu -->
+            <nav class="menu">
+                <a href="../../interfaces/business-info/aboutUs.php">Home</a>
+                <a href="#" class="active">Service</a>
+                <a href="../../interfaces/community/community.php">Community</a>
+                <a href="../../interfaces/profile/userProfile.php">Profile</a>
+            </nav>
+
+            <button class="avatar-button fas" type="button" onclick="toggleAvatar()">
+                <img src="../../assets/profile-icon.svg" alt="profile" class="avatar-text">
+            </button>
+
+            <!-- User Details Box -->
+            <div id="userDetails" class="user-box">
+                <p class="role" style="text-transform: capitalize;"><?php echo $this_user_role; ?></p>
+                <p><strong>Username: </strong><?php echo $name; ?></p>
+                <p><strong>Email: </strong><?php echo $email; ?></p>
+                <button><a href="../authentication/logout.php" style="text-decoration: none; color: white;">Logout</a></button>
+
+            </div>
         </div>
 
-        <!-- avatar -->
-        <button class="avatar-button" id="" type="button">
-            <span class="avatar-text">DJ</span>
-        </button>
-    </div>
+    </header>
 
     <div class="history-container">
 
@@ -43,7 +73,7 @@
         </div>
 
         <!-- history -->
-        <div class="history">
+        <div class="history" style="height: 100%; min-height: 83vh;">
 
             <!-- breadcrumb -->
             <div class="breadcrumb">
@@ -57,138 +87,241 @@
 
             <div class="content">
 
-                <!-- history-container -->
                 <div class="table-container">
 
-                    <!-- history table-->
-                    <table class="history-table">
-                        <thead class="table-head">
-                            <tr>
-                                <th>Request ID</th>
-                                <th>Date</th>
-                                <th>Duration</th>
-                                <th>Volunteer Name</th>
-                                <th>Service Involved</th>
-                                <th>Status</th>
-                                <th>Rating</th>
-                            </tr>
-                        </thead>
-                        <tbody class="table-body">
+                    <?php
+                    // connect db
+                    include('../../database/connect.php');
 
-                            <?php
-                            // connect db
-                            include('../../database/connect.php');
+                    if ($this_user_role === "volunteer") {
 
-                            // fetch data
-                            $sql = "SELECT * FROM service_request";
-                            $result = mysqli_query($conn, $sql);
+                        // history-container
+                        echo '<table class="history-table">';
+                        echo '<thead class="table-head">';
+                        echo '<tr>';
+                        echo '<th>Request ID</th>';
+                        echo '<th>Date</th>';
+                        echo ' <th>Duration (hours)</th>';
+                        echo '<th>Elderly Name</th>';
+                        echo '<th>Service Involved</th>';
+                        echo '<th>Status</th>';
+                        echo '<th>Rating</th>';
+                        echo '</tr>';
+                        echo '</thead>';
+                        echo '<tbody class="table-body">';
 
-                            if (mysqli_num_rows($result) > 0) {
+                        // fetch data
+                        $sql = "SELECT * FROM service_request WHERE volunteer_involved ='$id' AND (service_datetime < CURDATE() OR status = 'Rejected')";
+                        $result = mysqli_query($conn, $sql);
 
-                                while ($row = mysqli_fetch_assoc($result)) {
+                        if (mysqli_num_rows($result) > 0) {
 
-                                    echo '<tr>';
-                                    echo '<td>' . $row['requestID'] . '</td>';
-                                    $serviceDatetime = date('Y-m-d h:i A', strtotime($row['service_datetime']));
-                                    echo '<td>' . $serviceDatetime . '</td>';
-                                    echo '<td>' . $row['duration'] . '</td>';
+                            while ($row = mysqli_fetch_assoc($result)) {
 
-                                    // get volunteer name
-                                    $volunteer_involved = $row['volunteer_involved'];
-                                    $sql3 = "SELECT * FROM user WHERE userID = '$volunteer_involved'";
-                                    $result3 = mysqli_query($conn, $sql3);
+                                echo '<tr>';
+                                echo '<td>' . $row['requestID'] . '</td>';
+                                $serviceDatetime = date('Y-m-d h:i A', strtotime($row['service_datetime']));
+                                echo '<td>' . $serviceDatetime . '</td>';
+                                echo '<td>' . $row['duration'] . '</td>';
 
-                                    if (mysqli_num_rows($result3) > 0) {
-                                        while ($row3 = mysqli_fetch_assoc($result3)) {
-                                            echo '<td>' . $row3['firstname'] . '</td>';
-                                        }
-                                    } else {
-                                        // No rows found in the database
-                                        echo '<tr><td colspan="7">No data available</td></tr>';
+                                // get volunteer name
+                                $elderly_involved = $row['elderly_involved'];
+                                $sql3 = "SELECT * FROM user WHERE userID = '$elderly_involved'";
+                                $result3 = mysqli_query($conn, $sql3);
+
+                                if (mysqli_num_rows($result3) > 0) {
+                                    while ($row3 = mysqli_fetch_assoc($result3)) {
+                                        echo '<td>' . $row3['firstname'] . '</td>';
                                     }
-
-                                    // fetch service involved
-                                    $requestID = $row['requestID'];
-                                    $sql2 = "SELECT companionship,counseling,transportation,respite_care,medical_care,hospice_care,daily_living_assistance FROM service WHERE requestID = '$requestID'";
-                                    $result2 = mysqli_query($conn, $sql2);
-
-                                    if (mysqli_num_rows($result2) > 0) {
-
-                                        echo '<td>';
-                                        echo '<div class="service">';
-                                        $colors = array('#FAD2E1', '#FFD8B5', '#FFEFD1', '#D4F1F4', '#B5EAD7', '#F3D6E4', '#C7E9FF');
-                                        shuffle($colors);
-
-                                        while ($row2 = mysqli_fetch_assoc($result2)) {
-                                            foreach ($row2 as $columnName => $value) {
-                                                if ($value == 1) {
-                                                    $randomColor = array_shift($colors);
-                                                    echo '<p style="background-color: ' . $randomColor . ';">';
-                                                    echo $columnName;
-                                                    echo '</p>';
-                                                }
-                                            }
-                                        }
-                                        echo '</div>';
-                                        echo '</td>';
-                                    } else {
-                                        // No rows found in the database
-                                        echo '<tr><td colspan="7">No data available</td></tr>';
-                                    }
-
-                                    echo '<td>' . $row['status'] . '</td>';
-                                    echo '<td>';
-                                    if ($row['user_rating'] == 0) {
-                                        echo '<button id="rateButton" class="rate-button" onclick="openRatingPopup()">Rate</button>';
-
-                                        // Update service rating
-                                        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-                                            // Get the rating value from the request
-                                            $rating = $_POST['rate-popup'];
-
-                                            $updateServiceInvolved = "UPDATE service_request
-                                                                    SET user_rating = '$rating'
-                                                                    WHERE requestID = '$requestID'";
-
-                                            if (mysqli_query($conn, $updateServiceInvolved)) {
-
-                                                echo '<script>alert("Rating recorded.");</script>';
-                                                // header("Location: " . $_SERVER['PHP_SELF']);
-                                                // exit();
-
-                                            } else {
-                                                echo "Error storing service request: " . mysqli_error($conn);
-                                            }
-                                        }
-                                    } else {
-                                        echo '<div class="rate">';
-                                        echo '<input type="radio" id="star5" name="rate" value="5" ' . ($row['user_rating'] == 5 ? 'checked' : '') . ' disabled />';
-                                        echo '<label for="star5" title="text">5 stars</label>';
-                                        echo '<input type="radio" id="star4" name="rate" value="4" ' . ($row['user_rating'] == 4 ? 'checked' : '') . ' disabled />';
-                                        echo '<label for="star4" title="text">4 stars</label>';
-                                        echo '<input type="radio" id="star3" name="rate" value="3" ' . ($row['user_rating'] == 3 ? 'checked' : '') . ' disabled />';
-                                        echo '<label for="star3" title="text">3 stars</label>';
-                                        echo '<input type="radio" id="star2" name="rate" value="2" ' . ($row['user_rating'] == 2 ? 'checked' : '') . ' disabled />';
-                                        echo '<label for="star2" title="text">2 stars</label>';
-                                        echo '<input type="radio" id="star1" name="rate" value="1" ' . ($row['user_rating'] == 1 ? 'checked' : '') . ' disabled />';
-                                        echo '<label for="star1" title="text">1 star</label>';
-                                        echo '</div>';
-                                    }
-                                    echo '</td>';
-                                    echo '</tr>';
+                                } else {
+                                    // No rows found in the database
+                                    echo '<tr><td colspan="7">No data available</td></tr>';
                                 }
-                            } else {
-                                // No rows found in the database
-                                echo '<tr><td colspan="7">No data available</td></tr>';
+
+                                // fetch service involved
+                                $requestID = $row['requestID'];
+                                $sql2 = "SELECT companionship,counseling,transportation,respite_care,medical_care,hospice_care,daily_living_assistance FROM service WHERE requestID = '$requestID'";
+                                $result2 = mysqli_query($conn, $sql2);
+
+                                if (mysqli_num_rows($result2) > 0) {
+
+                                    echo '<td>';
+                                    echo '<div class="service">';
+                                    $colors = array('#FAD2E1', '#FFD8B5', '#FFEFD1', '#D4F1F4', '#B5EAD7', '#F3D6E4', '#C7E9FF');
+                                    shuffle($colors);
+
+                                    while ($row2 = mysqli_fetch_assoc($result2)) {
+                                        foreach ($row2 as $columnName => $value) {
+                                            if ($value == 1) {
+                                                $randomColor = array_shift($colors);
+                                                echo '<p style="background-color: ' . $randomColor . ';">';
+                                                echo $columnName;
+                                                echo '</p>';
+                                            }
+                                        }
+                                    }
+                                    echo '</div>';
+                                    echo '</td>';
+                                } else {
+                                    // No rows found in the database
+                                    echo '<tr><td colspan="7">No data available</td></tr>';
+                                }
+
+                                echo '<td>' . $row['status'] . '</td>';
+                                echo '<td>';
+                                if ($row['user_rating'] == 0) {
+                                    echo '<p>No rating.</p>';
+                                } else {
+                                    echo '<div class="rate">';
+                                    echo '<input type="radio" id="star5" name="rate" value="5" ' . ($row['user_rating'] == 5 ? 'checked' : '') . ' disabled />';
+                                    echo '<label for="star5" title="text">5 stars</label>';
+                                    echo '<input type="radio" id="star4" name="rate" value="4" ' . ($row['user_rating'] == 4 ? 'checked' : '') . ' disabled />';
+                                    echo '<label for="star4" title="text">4 stars</label>';
+                                    echo '<input type="radio" id="star3" name="rate" value="3" ' . ($row['user_rating'] == 3 ? 'checked' : '') . ' disabled />';
+                                    echo '<label for="star3" title="text">3 stars</label>';
+                                    echo '<input type="radio" id="star2" name="rate" value="2" ' . ($row['user_rating'] == 2 ? 'checked' : '') . ' disabled />';
+                                    echo '<label for="star2" title="text">2 stars</label>';
+                                    echo '<input type="radio" id="star1" name="rate" value="1" ' . ($row['user_rating'] == 1 ? 'checked' : '') . ' disabled />';
+                                    echo '<label for="star1" title="text">1 star</label>';
+                                    echo '</div>';
+                                }
+                                echo '</td>';
+                                echo '</tr>';
                             }
+                        } else {
+                            // No rows found in the database
+                            echo '<tr><td colspan="7">No data available</td></tr>';
+                        }
+                    }
 
-                            // close connection
-                            mysqli_free_result($result);
-                            mysqli_close($conn);
-                            ?>
+                    if ($this_user_role === "elderly") {
 
-                        </tbody>
+                        // history-container
+                        echo '<table class="history-table">';
+                        echo '<thead class="table-head">';
+                        echo '<tr>';
+                        echo '<th>Request ID</th>';
+                        echo '<th>Date</th>';
+                        echo ' <th>Duration (hours)</th>';
+                        echo '<th>Volunteer Name</th>';
+                        echo '<th>Service Involved</th>';
+                        echo '<th>Status</th>';
+                        echo '<th>Rating</th>';
+                        echo '</tr>';
+                        echo '</thead>';
+                        echo '<tbody class="table-body">';
+
+                        // fetch data
+                        $sql = "SELECT * FROM service_request WHERE elderly_involved ='$id' AND (service_datetime < CURDATE() OR status = 'Rejected')";
+                        $result = mysqli_query($conn, $sql);
+
+                        if (mysqli_num_rows($result) > 0) {
+
+                            while ($row = mysqli_fetch_assoc($result)) {
+
+                                echo '<tr>';
+                                echo '<td>' . $row['requestID'] . '</td>';
+                                $serviceDatetime = date('Y-m-d h:i A', strtotime($row['service_datetime']));
+                                echo '<td>' . $serviceDatetime . '</td>';
+                                echo '<td>' . $row['duration'] . '</td>';
+
+                                // get volunteer name
+                                $volunteer_involved = $row['volunteer_involved'];
+                                $sql3 = "SELECT * FROM user WHERE userID = '$volunteer_involved'";
+                                $result3 = mysqli_query($conn, $sql3);
+
+                                if (mysqli_num_rows($result3) > 0) {
+                                    while ($row3 = mysqli_fetch_assoc($result3)) {
+                                        echo '<td>' . $row3['firstname'] . '</td>';
+                                    }
+                                } else {
+                                    // No rows found in the database
+                                    echo '<tr><td colspan="7">No data available</td></tr>';
+                                }
+
+                                // fetch service involved
+                                $requestID = $row['requestID'];
+                                $sql2 = "SELECT companionship,counseling,transportation,respite_care,medical_care,hospice_care,daily_living_assistance FROM service WHERE requestID = '$requestID'";
+                                $result2 = mysqli_query($conn, $sql2);
+
+                                if (mysqli_num_rows($result2) > 0) {
+
+                                    echo '<td>';
+                                    echo '<div class="service">';
+                                    $colors = array('#FAD2E1', '#FFD8B5', '#FFEFD1', '#D4F1F4', '#B5EAD7', '#F3D6E4', '#C7E9FF');
+                                    shuffle($colors);
+
+                                    while ($row2 = mysqli_fetch_assoc($result2)) {
+                                        foreach ($row2 as $columnName => $value) {
+                                            if ($value == 1) {
+                                                $randomColor = array_shift($colors);
+                                                echo '<p style="background-color: ' . $randomColor . ';">';
+                                                echo $columnName;
+                                                echo '</p>';
+                                            }
+                                        }
+                                    }
+                                    echo '</div>';
+                                    echo '</td>';
+                                } else {
+                                    // No rows found in the database
+                                    echo '<tr><td colspan="7">No data available</td></tr>';
+                                }
+
+                                echo '<td>' . $row['status'] . '</td>';
+                                echo '<td>';
+                                if ($row['user_rating'] == 0) {
+                                    echo '<button id="rateButton" class="rate-button" onclick="openRatingPopup()">Rate</button>';
+
+                                    // Update service rating
+                                    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+                                        // Get the rating value from the request
+                                        $rating = $_POST['rate-popup'];
+
+                                        $updateServiceInvolved = "UPDATE service_request
+                                                                SET user_rating = '$rating'
+                                                                WHERE requestID = '$requestID'";
+
+                                        if (mysqli_query($conn, $updateServiceInvolved)) {
+
+                                            echo '<script>alert("Rating recorded.");</script>';
+                                            // header("Location: " . $_SERVER['PHP_SELF']);
+                                            // exit();
+
+                                        } else {
+                                            echo "Error storing service request: " . mysqli_error($conn);
+                                        }
+                                    }
+                                } else {
+                                    echo '<div class="rate">';
+                                    echo '<input type="radio" id="star5" name="rate" value="5" ' . ($row['user_rating'] == 5 ? 'checked' : '') . ' disabled />';
+                                    echo '<label for="star5" title="text">5 stars</label>';
+                                    echo '<input type="radio" id="star4" name="rate" value="4" ' . ($row['user_rating'] == 4 ? 'checked' : '') . ' disabled />';
+                                    echo '<label for="star4" title="text">4 stars</label>';
+                                    echo '<input type="radio" id="star3" name="rate" value="3" ' . ($row['user_rating'] == 3 ? 'checked' : '') . ' disabled />';
+                                    echo '<label for="star3" title="text">3 stars</label>';
+                                    echo '<input type="radio" id="star2" name="rate" value="2" ' . ($row['user_rating'] == 2 ? 'checked' : '') . ' disabled />';
+                                    echo '<label for="star2" title="text">2 stars</label>';
+                                    echo '<input type="radio" id="star1" name="rate" value="1" ' . ($row['user_rating'] == 1 ? 'checked' : '') . ' disabled />';
+                                    echo '<label for="star1" title="text">1 star</label>';
+                                    echo '</div>';
+                                }
+                                echo '</td>';
+                                echo '</tr>';
+                            }
+                        } else {
+                            // No rows found in the database
+                            echo '<tr><td colspan="7">No data available</td></tr>';
+                        }
+                    }
+
+                    // close connection
+                    mysqli_free_result($result);
+                    mysqli_close($conn);
+                    ?>
+
+                    </tbody>
                     </table>
 
                 </div>
@@ -221,12 +354,8 @@
         </div>
     </form>
 
-
-
     <!-- Footer -->
-    <div class="footer">
-        <p>©2023 HelpConnect. All right reserved.</p>
-    </div>
+    <?php include('../authentication/footer.php') ?>
 </body>
 
 <script>

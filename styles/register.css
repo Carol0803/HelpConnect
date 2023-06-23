@@ -116,10 +116,24 @@
     text-align: center;
 }
 
-.signup-form .form-container button {
+.button button {
     margin: 30px;
     background-color: var(--secondary-color);
     color: black;
+ }
+
+ .button button:disabled {
+    margin: 30px;
+    background-color: #D9D9D9;
+    color: gray;
+    cursor: not-allowed;
+ }
+
+ .button button:not(:disabled) {
+    margin: 30px;
+    background-color: var(--secondary-color);
+    color: black;
+    cursor: pointer;
 }
 
 .radiobutton-health {
@@ -160,3 +174,6 @@
     padding-top: 10px !important;
 }
 
+.no-spinner::-webkit-inner-spin-button {
+    -webkit-appearance: none !important;
+}

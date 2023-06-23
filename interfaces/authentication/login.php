@@ -17,7 +17,9 @@ if (isset($_POST['submit'])) {
         $_SESSION['id'] = $row['userID'];
         $_SESSION['email'] = $row['email'];
         $_SESSION['role'] = $row['role'];
-        header('Location: /Project/interfaces/service/discover.php');
+        $_SESSION['name'] = $row['firstname'] . ' ' . $row['lastname'];
+
+        header('Location: /Project/interfaces/business-info/aboutUs.php');
     } else {
         $message = 'Incorrect email or password!';
         echo "<script>alert('$message');</script>";

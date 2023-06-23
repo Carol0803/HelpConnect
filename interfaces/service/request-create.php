@@ -1,4 +1,17 @@
 <?php
+
+include('../../database/connect.php');
+
+session_start();
+
+$id = $_SESSION['id'];
+$email = $_SESSION['email'];
+$this_user_role = $_SESSION['role'];
+$name = $_SESSION['name'];
+
+?>
+
+<?php
 // connect db
 include('../../database/connect.php');
 
@@ -20,7 +33,7 @@ if (isset($_GET['userID'])) {
             $lastname = $row['lastname'];
 
             // get user name
-            $query = "SELECT * FROM user WHERE userID = '1'";
+            $query = "SELECT * FROM user WHERE userID = '$id'";
             $result = mysqli_query($conn, $query);
 
             if ($result) {
@@ -68,7 +81,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     // Create service request
     $createServiceRequest = "INSERT INTO service_request (elderly_involved, volunteer_involved, create_datetime, service_datetime, duration, description, status)
-                    VALUES ('1', '$userID', '$createDate', '$date', '$duration', '$description', '$status')";
+                    VALUES ('$id', '$userID', '$createDate', '$date', '$duration', '$description', '$status')";
 
     if (mysqli_query($conn, $createServiceRequest)) {
 
@@ -117,28 +130,48 @@ mysqli_close($conn);
 
     <!-- import custom css -->
     <link rel="stylesheet" href="../../styles/main.css" type="text/css">
+    <link rel="stylesheet" href="../../styles/header.css" type="text/css">
+    <link rel="stylesheet" href="../../styles/footer.css" type="text/css">
     <link rel="stylesheet" href="../../styles/create.css" type="text/css">
+
+    <script>
+        function toggleAvatar() {
+            var userDetails = document.getElementById("userDetails");
+            userDetails.style.display = (userDetails.style.display === "block") ? "none" : "block";
+        }
+    </script>
 </head>
 
 <body>
 
     <!-- header -->
-    <div class="header">
-        <img src="../../assets/logo.svg" alt="logo" height="55px">
+    <header>
+        <div class="header">
+            <img src="../../assets/logo.svg" alt="logo" height="55px">
 
-        <!-- menu -->
-        <div class="menu">
-            <a href="">Home</a>
-            <a href="#" class="active">Service</a>
-            <a href="">Community</a>
-            <a href="">Profile</a>
+            <!-- menu -->
+            <nav class="menu">
+                <a href="../../interfaces/business-info/aboutUs.php">Home</a>
+                <a href="#" class="active">Service</a>
+                <a href="../../interfaces/community/community.php">Community</a>
+                <a href="../../interfaces/profile/userProfile.php">Profile</a>
+            </nav>
+
+            <button class="avatar-button fas" type="button" onclick="toggleAvatar()">
+                <img src="../../assets/profile-icon.svg" alt="profile" class="avatar-text">
+            </button>
+
+            <!-- User Details Box -->
+            <div id="userDetails" class="user-box">
+                <p class="role" style="text-transform: capitalize;"><?php echo $this_user_role; ?></p>
+                <p><strong>Username: </strong><?php echo $name; ?></p>
+                <p><strong>Email: </strong><?php echo $email; ?></p>
+                <button><a href="../authentication/logout.php" style="text-decoration: none; color: white;">Logout</a></button>
+
+            </div>
         </div>
 
-        <!-- avatar -->
-        <button class="avatar-button" id="" type="button">
-            <span class="avatar-text">DJ</span>
-        </button>
-    </div>
+    </header>
 
     <div class="create-request-container">
 
