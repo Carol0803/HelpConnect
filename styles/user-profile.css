@@ -74,6 +74,11 @@
     margin-bottom: 10px;
 }
 
+.input-label {
+    margin: 0 !important;
+    padding-left: 15px !important;
+}
+
 .radiobutton {
     display: flex;
     flex-direction: row;
@@ -90,6 +95,7 @@
 .radiobutton p {
     margin: 0 !important;
     color: black;
+    padding-left: 5px;
 }
 
 .radiobutton input {
@@ -102,7 +108,7 @@
 }
 
 .birth-date .birth-date-label {
-    padding-left: 10px;
+    padding-left: 15px !important;
     margin: 0 !important;
     text-align: left !important;
 }

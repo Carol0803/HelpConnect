@@ -9,6 +9,10 @@ $email = $_SESSION['email'];
 $this_user_role = $_SESSION['role'];
 $name = $_SESSION['name'];
 
+if (!isset($id)) {
+    header('location:../authentication/login.php');
+}
+
 ?>
 
 <?php
@@ -90,7 +94,7 @@ if (isset($_POST['submit'])) {
     $query = "UPDATE user SET 
     firstname='$firstname', 
     lastname='$lastname', 
-    lastname='$gender', 
+    gender='$gender', 
     contact='$contactno', 
     address='$address1', 
     address2='$address2', 
@@ -171,7 +175,6 @@ if (isset($_POST['submit'])) {
     }
 }
 
-
 // Close the database connection
 mysqli_close($conn);
 ?>
@@ -237,8 +240,8 @@ mysqli_close($conn);
 
         <!-- side bar -->
         <div class="sidebar">
-            <a href="userProfile.php" class="active">Information Setting</a>
-            <a href="privacy.php">Privacy Setting</a>
+            <a href="user-profile.php" class="active">Information Setting</a>
+            <a href="privacy-setting.php">Privacy Setting</a>
         </div>
 
         <!-- profile -->
@@ -247,9 +250,9 @@ mysqli_close($conn);
 
             <!-- breadcrumb -->
             <div class="breadcrumb">
-                <a href="profile.php">Profile</a>
+                <a href="user-profile.php">Profile</a>
                 <strong> / </strong>
-                <a href="discover.php">Information Setting</a>
+                <a href="user-profile.php">Information Setting</a>
             </div>
 
             <!-- title-->
@@ -266,7 +269,9 @@ mysqli_close($conn);
 
                         <div class="basic">
                             <div class="signup-name">
+                                <p class="input-label">First Name:</p>
                                 <input type="text" name="firstname" placeholder="First Name" required class="box" value="<?php echo $firstname; ?>">
+                                <p class="input-label">Last Name:</p>
                                 <input type="text" name="lastname" placeholder="Last Name" required class="box" value="<?php echo $lastname; ?>">
                             </div>
                             <div class="radiobutton">
@@ -280,7 +285,9 @@ mysqli_close($conn);
                                     <label for="female">Female</label><br>
                                 </div>
                             </div>
+                            <p class="input-label">Email:</p>
                             <input type="email" name="email" id="email" placeholder="Email Address" required class="box" pattern="[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}" value="<?php echo $email; ?>" readonly>
+                            <p class="input-label">Contact No.:</p>
                             <input type="number" name="contactno" placeholder="Contact No." required class="box no-spinner" value="<?php echo $contact; ?>">
                             <div class="birth-date">
                                 <p class="birth-date-label">Birth Date:</p>
@@ -289,13 +296,14 @@ mysqli_close($conn);
                         </div>
 
                         <div class="addr-pass">
+                            <p class="input-label">Address:</p>
                             <input type="text" id="address1" name="address1" placeholder="Street Address" required class="box" value="<?php echo $address; ?>">
                             <input type="text" id="address2" name="address2" placeholder="Street Address Line 2" required class="box" value="<?php echo $address2; ?>">
                             <div class="city-state">
                                 <input type="text" id="city" name="city" placeholder="City" required value="<?php echo $city; ?>">
                                 <input type="text" id="state" name="state" placeholder="State" required value="<?php echo $state; ?>">
                             </div>
-                            <input type="number" id="postcode" name="postcode" pattern="\d{5}" title="Password must be 5 digits" placeholder="Postcode" required class="box no-spinner" value="<?php echo $postcode; ?>">
+                            <input type="number" id="postcode" name="postcode" pattern="\d{5}" title="Postcode must be 5 digits" placeholder="Postcode" required class="box no-spinner" value="<?php echo $postcode; ?>">
                             <input type="text" id="country" name="country" placeholder="Country" required class="box" value="<?php echo $country; ?>">
 
                         </div>
@@ -441,6 +449,5 @@ mysqli_close($conn);
     <?php include('../authentication/footer.php') ?>
 
 </body>
-
 
 </html>

@@ -42,7 +42,7 @@ $name = $_SESSION['name'];
                 <a href="#" class="active">Home</a>
                 <a href="../../interfaces/service/discover.php">Service</a>
                 <a href="../../interfaces/community/community.php">Community</a>
-                <a href="../../interfaces/profile/userProfile.php">Profile</a>
+                <a href="../../interfaces/profile/user-profile.php">Profile</a>
             </nav>
 
             <button class="avatar-button fas" type="button" onclick="toggleAvatar()">
@@ -50,7 +50,7 @@ $name = $_SESSION['name'];
             </button>
 
              <!-- User Details Box -->
-             <div id="userDetails" class="user-box">
+             <div id="userDetails" class="user-box" style="z-index: 999;">
                 <p class="role" style="text-transform: capitalize;"><?php echo $role; ?></p>
                 <p><strong>Username: </strong><?php echo $name; ?></p>
                 <p><strong>Email: </strong><?php echo $email; ?></p>

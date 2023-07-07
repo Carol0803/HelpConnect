@@ -9,6 +9,10 @@ $email = $_SESSION['email'];
 $this_user_role = $_SESSION['role'];
 $name = $_SESSION['name'];
 
+if (!isset($id)) {
+    header('location:../authentication/login.php');
+}
+
 ?>
 
 <?php
@@ -183,7 +187,7 @@ mysqli_close($conn);
                 <a href="../../interfaces/business-info/aboutUs.php">Home</a>
                 <a href="#" class="active">Service</a>
                 <a href="../../interfaces/community/community.php">Community</a>
-                <a href="../../interfaces/profile/userProfile.php">Profile</a>
+                <a href="../../interfaces/profile/user-profile.php">Profile</a>
             </nav>
 
             <button class="avatar-button fas" type="button" onclick="toggleAvatar()">
@@ -286,12 +290,7 @@ mysqli_close($conn);
                     <!-- decription -->
                     <label for="description">Description</label><br>
                     <textarea id="description" name="description" rows="4" cols="50"><?php echo $description; ?></textarea>
-
-                    <!-- rewards -->
-                    <input type="checkbox" id="payCheckbox" name="payCheckbox" value="pay" onchange="togglePaymentInput()">
-                    <label for="payCheckbox">Rewards</label><br>
-                    <input type="number" id="paymentInput" name="paymentInput" placeholder="Amount(RM)" disabled><br>
-
+                    
                     <!-- btn -->
                     <div class="button">
                         <button type="submit" id="submitButton" class="send" form="serviceRequestForm" disabled>Save</button>

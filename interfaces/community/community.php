@@ -9,6 +9,10 @@ $email = $_SESSION['email'];
 $this_user_role = $_SESSION['role'];
 $name = $_SESSION['name'];
 
+if (!isset($id)) {
+    header('location:../authentication/login.php');
+}
+
 ?>
 
 <?php
@@ -95,103 +99,6 @@ mysqli_close($conn);
             }
         }
 
-        function importPicture() {
-            var input = document.createElement('input');
-            input.type = 'file';
-            input.accept = '.jpg, .jpeg, .png';
-            input.onchange = handleFileSelect;
-            input.click();
-        }
-
-        function handleFileSelect(event) {
-            var file = event.target.files[0];
-            var allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-            if (allowedTypes.indexOf(file.type) === -1) {
-                alert('Invalid file type. Please select an image file.');
-                return;
-            }
-
-            var reader = new FileReader();
-            reader.onload = function(event) {
-                var img = document.createElement('img');
-                img.src = event.target.result;
-                img.classList.add('preview-image');
-                document.getElementById('imagePreview').appendChild(img);
-            };
-            reader.readAsDataURL(file);
-        }
-
-        // function postContent() {
-        //     var content = document.getElementById('myTextArea').innerHTML;
-        //     var postedContent = document.createElement('div');
-        //     postedContent.innerHTML = content;
-        //     postedContent.classList.add('post-content');
-
-        //     var images = document.getElementById('imagePreview').getElementsByTagName('img');
-        //     for (var i = 0; i < images.length; i++) {
-        //         var imgContainer = document.createElement('div');
-        //         imgContainer.classList.add('image-container');
-
-        //         var img = document.createElement('img');
-        //         img.src = images[i].src;
-        //         img.classList.add('preview-image');
-        //         imgContainer.appendChild(img);
-
-        //         postedContent.appendChild(imgContainer);
-        //     }
-
-        //     var postActions = document.createElement('div');
-        //     postActions.innerHTML = `
-        //             <button class="like-button" onclick="likePost(this)"><img src="../../assets/like.svg" alt="like" height="27px" width="27px"></button>
-        //             <button class="comment-button" onclick="commentPost(this)"><img src="../../assets/comment.svg" alt="bold" height="24px" width="24px"></button>`;
-        //     postedContent.appendChild(postActions);
-
-        //     var likesContainer = document.createElement('div');
-        //     likesContainer.classList.add('likes-container');
-        //     postedContent.appendChild(likesContainer);
-
-        //     var postedContentContainer = document.getElementById('postedContentContainer');
-        //     var firstChild = postedContentContainer.firstChild;
-        //     if (firstChild) {
-        //         postedContentContainer.insertBefore(postedContent, firstChild);
-        //     } else {
-        //         postedContentContainer.appendChild(postedContent);
-        //     }
-
-        //     document.getElementById('myTextArea').innerHTML = ''; // Clear the text area
-        //     document.getElementById('imagePreview').innerHTML = ''; // Clear the image preview
-        // }
-
-        // function likePost(button) {
-        //     var postElement = button.parentNode.parentNode;
-        //     var likesContainer = postElement.querySelector('.likes-container');
-        //     var likeCount = likesContainer.querySelector('.like-count');
-        //     var likeButton = button.querySelector('img');
-
-        //     if (!likeCount) {
-        //         likeCount = document.createElement('span');
-        //         likeCount.classList.add('like-count');
-        //         likeCount.textContent = 'Likes: 1';
-        //         likesContainer.appendChild(likeCount);
-
-        //         likeButton.src = "../../assets/liked.svg"; // Change the like button image to "liked"
-        //         likeButton.alt = "liked";
-        //     } else {
-        //         var currentLikes = parseInt(likeCount.textContent.split(':')[1].trim());
-        //         if (likeButton.alt === "liked") {
-        //             likeCount.textContent = 'Likes: ' + (currentLikes - 1);
-        //             likeButton.src = "../../assets/like.svg"; // Change the like button image back to "like"
-        //             likeButton.alt = "like";
-        //         } else {
-        //             likeCount.textContent = 'Likes: ' + (currentLikes + 1);
-        //             likeButton.src = "../../assets/liked.svg"; // Change the like button image to "liked"
-        //             likeButton.alt = "liked";
-        //         }
-        //     }
-
-        //     button.disabled = true; // Disable the like button to prevent multiple clicks
-        // }
-
         function commentPost(button, postID) {
             var postElement = button.parentNode.parentNode;
             var commentContainer = postElement.querySelector('.comment-container');
@@ -265,39 +172,6 @@ mysqli_close($conn);
             form.submit();
         }
 
-        // function commentPost(postID) {
-        //     var form = document.createElement('form');
-        //     form.method = 'post';
-        //     form.action = '<?php echo $_SERVER["PHP_SELF"]; ?>';
-
-        //     var inputPostID = document.createElement('input');
-        //     inputPostID.type = 'hidden';
-        //     inputPostID.name = 'postID';
-        //     inputPostID.value = postID;
-
-        //     var inputAction = document.createElement('input');
-        //     inputAction.type = 'hidden';
-        //     inputAction.name = 'action';
-        //     inputAction.value = 'comment';
-
-        //     var commentInput = document.createElement('input');
-        //     commentInput.type = 'text';
-        //     commentInput.name = 'comment';
-        //     commentInput.placeholder = 'Enter your comment...';
-
-        //     var submitButton = document.createElement('button');
-        //     submitButton.textContent = 'Submit';
-
-        //     form.appendChild(inputPostID);
-        //     form.appendChild(inputAction);
-        //     form.appendChild(commentInput);
-        //     form.appendChild(submitButton);
-
-        //     document.body.appendChild(form);
-        //     form.submit();
-        // }
-
-
         function submitComment(postElement, commentInput) {
             var commentText = commentInput.value;
             if (commentText.trim() === '') {
@@ -333,7 +207,7 @@ mysqli_close($conn);
                 <a href="../../interfaces/business-info/aboutUs.php">Home</a>
                 <a href="../../interfaces/service/discover.php">Service</a>
                 <a href="#" class="active">Community</a>
-                <a href="../../interfaces/profile/userProfile.php">Profile</a>
+                <a href="../../interfaces/profile/user-profile.php">Profile</a>
             </nav>
 
             <button class="avatar-button fas" type="button" onclick="toggleAvatar()">
@@ -377,8 +251,6 @@ mysqli_close($conn);
                             <button class="action-icon" onclick="formatText('bold')"><img src="../../assets/bold-icon.svg" alt="bold" height="14px" width="15px"></button>
                             <button class="action-icon" onclick="formatText('underline')"><img src="../../assets/italic-icon.svg" alt="underline" height="14px" width="15px"></button>
                             <button class="action-icon" onclick="formatText('italic')"><img src="../../assets/underline-icon.svg" alt="italic" height="17px" width="17px"></button>
-                            <span class="vertical-divider"></span>
-                            <button class="action-icon" onclick="importPicture()"><img src="../../assets/photo-icon.svg" alt="picture" height="17px" width="17px"></button>
                         </div>
 
                         <button type="submit" class="post-button" id="postButton" disabled>Post</button>
@@ -400,7 +272,9 @@ mysqli_close($conn);
 
                 include('../../database/connect.php');
 
-                $query = "SELECT * FROM post WHERE userID = '$id' ORDER BY datetime DESC";
+                // $query = "SELECT * FROM post WHERE userID = '$id' ORDER BY datetime DESC";
+                $query = "SELECT * FROM post WHERE userID = '$id' OR userID IN (SELECT userID FROM follower WHERE followerID = '$id') ORDER BY datetime DESC";
+
                 $result = mysqli_query($conn, $query);
 
                 if ($result && mysqli_num_rows($result) > 0) {
@@ -408,10 +282,6 @@ mysqli_close($conn);
                         $postID = $row['postID'];
                         $postContent = $row['post_content'];
                         $datetime = $row['datetime'];
-
-                        // // Get the post's images (assuming $conn is the database connection object)
-                        // $imageQuery = "SELECT * FROM post_images WHERE postID = '$postID'";
-                        // $imageResult = mysqli_query($conn, $imageQuery);
 
                         // Start generating the HTML structure for each post
                         echo '<div>';

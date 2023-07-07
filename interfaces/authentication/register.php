@@ -52,9 +52,8 @@ if (isset($_POST['submit'])) {
                            VALUES ('$companionship','$counseling','$transportation','$respite_care','$medical_care','$hospice_care','$daily_living_assistance','$userID')";
 
                if (mysqli_query($conn, $serviceNeeded)) {
-                  echo "<script>alert('Account created.');</script>";
-                  header("Location: login.php");
-                  exit();
+                  echo "<script>alert('Account created.'); window.location.href = 'login.php';</script>";
+                  // exit();
                } else {
                   echo "<script>alert('Error: " . mysqli_error($conn) . "');</script>";
                }
@@ -87,9 +86,9 @@ if (isset($_POST['submit'])) {
                            VALUES ('$companionship','$counseling','$transportation','$respite_care','$medical_care','$hospice_care','$daily_living_assistance','$userID')";
 
                if (mysqli_query($conn, $serviceNeeded)) {
-                  echo "<script>alert('Account created.');</script>";
-                  header("Location: login.php");
-                  exit();
+                  echo "<script>alert('Account created.'); window.location.href = 'login.php';</script>";
+
+                  // exit();
                } else {
                   echo "<script>alert('Error: " . mysqli_error($conn) . "');</script>";
                }

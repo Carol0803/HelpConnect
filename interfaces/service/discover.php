@@ -9,6 +9,10 @@ $email = $_SESSION['email'];
 $this_user_role = $_SESSION['role'];
 $name = $_SESSION['name'];
 
+if (!isset($id)) {
+    header('location:../authentication/login.php');
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -43,7 +47,7 @@ $name = $_SESSION['name'];
                 <a href="../../interfaces/business-info/aboutUs.php">Home</a>
                 <a href="#" class="active">Service</a>
                 <a href="../../interfaces/community/community.php">Community</a>
-                <a href="../../interfaces/profile/userProfile.php">Profile</a>
+                <a href="../../interfaces/profile/user-profile.php">Profile</a>
             </nav>
 
             <button class="avatar-button fas" type="button" onclick="toggleAvatar()">
@@ -151,70 +155,71 @@ $name = $_SESSION['name'];
                         $gender = $user['gender'];
                     ?>
                         <!-- profile -->
-                        <div class="profile">
-                            <img src="" alt="user-img">
-                            <div class="profile-block">
-                                <h3>Name: </h3>
-                                <h4><?php echo $name; ?></h4>
-                            </div>
-                            <div class="profile-block">
-                                <h3>Age: </h3>
-                                <h4><?php echo $age; ?></h4>
-                            </div>
-                            <div class="profile-block">
-                                <h3>Gender: </h3>
-                                <h4><?php echo $gender; ?></h4>
-                            </div>
+                        <div class="profile" style="min-width: 200px; background-color: white; justify-content: space-between;">
+                            <div>
+                                <div class="profile-block">
+                                    <h3>Name: </h3>
+                                    <h4><?php echo $name; ?></h4>
+                                </div>
+                                <div class="profile-block">
+                                    <h3>Age: </h3>
+                                    <h4><?php echo $age; ?></h4>
+                                </div>
+                                <div class="profile-block">
+                                    <h3>Gender: </h3>
+                                    <h4><?php echo $gender; ?></h4>
+                                </div>
 
-                            <div class="profile-block">
-                                <h3>Service: </h3>
-                            </div>
+                                <div class="profile-block">
+                                    <h3>Service: </h3>
+                                </div>
 
-                            <!-- retrieve service -->
-                            <?php
+                                <!-- retrieve service -->
+                                <?php
 
-                            // connect db
-                            include('../../database/connect.php');
+                                // connect db
+                                include('../../database/connect.php');
 
-                            // fetch data
-                            $serviceQuery = "SELECT companionship,counseling,transportation,respite_care,medical_care,hospice_care,daily_living_assistance FROM service WHERE userID ='$userID'";
+                                // fetch data
+                                $serviceQuery = "SELECT companionship,counseling,transportation,respite_care,medical_care,hospice_care,daily_living_assistance FROM service WHERE userID ='$userID'";
 
-                            $serviceResult = mysqli_query($conn, $serviceQuery);
+                                $serviceResult = mysqli_query($conn, $serviceQuery);
 
-                            echo '<div class="service-container">';
-                            $colors = array('#FAD2E1', '#FFD8B5', '#FFEFD1', '#D4F1F4', '#B5EAD7', '#F3D6E4', '#C7E9FF');
-                            shuffle($colors);
+                                echo '<div class="service-container">';
+                                $colors = array('#FAD2E1', '#FFD8B5', '#FFEFD1', '#D4F1F4', '#B5EAD7', '#F3D6E4', '#C7E9FF');
+                                shuffle($colors);
 
-                            while ($row = mysqli_fetch_assoc($serviceResult)) {
-                                foreach ($row as $columnName => $value) {
-                                    if ($value == 1) {
-                                        $randomColor = array_shift($colors);
-                                        echo '<p style="background-color: ' . $randomColor . ';">';
-                                        echo $columnName;
-                                        echo '</p>';
+                                while ($row = mysqli_fetch_assoc($serviceResult)) {
+                                    foreach ($row as $columnName => $value) {
+                                        if ($value == 1) {
+                                            $randomColor = array_shift($colors);
+                                            echo '<p style="background-color: ' . $randomColor . ';">';
+                                            echo $columnName;
+                                            echo '</p>';
+                                        }
                                     }
                                 }
-                            }
-                            echo '</div>';
+                                echo '</div>';
 
-                            echo '<a class="view-profile" href="discover-profile.php?userID=' . $userID . '">View Profile</a>';
+                                echo '</div>';
+                                echo '<a class="view-profile" href="discover-profile.php?userID=' . $userID . '">View Profile</a>';
+                                ?>
+                            </div>
 
-                            ?>
-                        </div>
-                    <?php
+                        <?php
                     }
 
                     // close connection
                     mysqli_free_result($result);
                     mysqli_close($conn);
-                    ?>
+                        ?>
+                        </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <!-- Footer -->
-    <?php include('../authentication/footer.php') ?>
+        <!-- Footer -->
+        <?php include('../authentication/footer.php') ?>
 </body>
 
 </html>

@@ -91,15 +91,11 @@
 .profile {
     background-color: white;
     padding: 10px 30px;
-    width: fit-content;
+    width: 350px;
     display: flex;
     flex-direction: column;
     gap: 0;
-}
-
-.profile img {
-    width: 200px;
-    height: 200px;
+    
 }
 
 .profile-block {

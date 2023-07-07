@@ -28,7 +28,7 @@ if (isset($_GET['userID'])) {
 
             // retrieve user data
             $row = mysqli_fetch_assoc($result);
-            $name = $row['firstname'] . ' ' . $row['lastname'];
+            $username = $row['firstname'] . ' ' . $row['lastname'];
             $birthdate = $row['birthdate'];
             $gender = $row['gender'];
             $location = $row['city'] . ', ' . $row['state'];
@@ -48,6 +48,30 @@ if (isset($_GET['userID'])) {
 } else {
     // No userID parameter provided in the URL
     echo "Invalid request";
+}
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['follow'])) {
+    $followerID = mysqli_real_escape_string($conn, $_POST['followerID']);
+    $userID = mysqli_real_escape_string($conn, $_POST['userID']);
+
+    // Check if the pair already exists in the follow table
+    $checkQuery = "SELECT * FROM follower WHERE followerID = '$followerID' AND userID = '$userID'";
+    $checkResult = mysqli_query($conn, $checkQuery);
+
+    if ($checkResult && mysqli_num_rows($checkResult) > 0) {
+        // The pair already exists, do not insert into the follow table
+        echo "<script>alert('You are already following this user.');</script>";
+    } else {
+        // The pair does not exist, insert into the follow table
+        $insertQuery = "INSERT INTO follower (followerID, userID) VALUES ('$followerID', '$userID')";
+        $insertResult = mysqli_query($conn, $insertQuery);
+
+        if ($insertResult) {
+            echo "<script>alert('You are now following this user.'); window.location.href = 'discover.php';</script>";
+        } else {
+            echo "<script>alert('Error: " . mysqli_error($conn) . "');</script>";
+        }
+    }
 }
 
 // Close the database connection
@@ -105,7 +129,7 @@ mysqli_close($conn);
 
     </header>
 
-    <div class="profile-container">
+    <div class="profile-container" style="min-height: 86vh;">
 
         <!-- side bar -->
         <div class="sidebar">
@@ -129,7 +153,7 @@ mysqli_close($conn);
                 <strong> / </strong>
                 <a href="discover.php">Discover</a>
                 <strong> / </strong>
-                <a href="#"><strong><?php echo $name; ?></strong></a>
+                <a href="#"><strong><?php echo $username; ?></strong></a>
             </div>
 
             <div class="content">
@@ -142,21 +166,7 @@ mysqli_close($conn);
 
                         <div class="name">
                             <!-- title-->
-                            <h1><?php echo $name; ?></h1>
-
-                            <!-- rating -->
-                            <!-- <div class="rate">
-                                <input type="radio" id="star5" name="rate" value="5" <?php echo ($rating == 5) ? 'checked' : ''; ?> disabled />
-                                <label for="star5" title="text">5 stars</label>
-                                <input type="radio" id="star4" name="rate" value="4" <?php echo ($rating == 4) ? 'checked' : ''; ?> disabled />
-                                <label for="star4" title="text">4 stars</label>
-                                <input type="radio" id="star3" name="rate" value="3" <?php echo ($rating == 3) ? 'checked' : ''; ?> disabled />
-                                <label for="star3" title="text">3 stars</label>
-                                <input type="radio" id="star2" name="rate" value="2" <?php echo ($rating == 2) ? 'checked' : ''; ?> disabled />
-                                <label for="star2" title="text">2 stars</label>
-                                <input type="radio" id="star1" name="rate" value="1" <?php echo ($rating == 1) ? 'checked' : ''; ?> disabled />
-                                <label for="star1" title="text">1 star</label>
-                            </div> -->
+                            <h1><?php echo $username; ?></h1>
 
                         </div>
 
@@ -203,14 +213,30 @@ mysqli_close($conn);
 
                     <!-- img, btn -->
                     <div class="action-btn">
-                        <img src="" alt="user-img">
-                        <button class="follow">Follow</button>
+                        <?php
+                        // Check if the user is already being followed
+                        $followQuery = "SELECT * FROM follower WHERE followerID = '$id' AND userID = '$userID'";
+                        $followResult = mysqli_query($conn, $followQuery);
+                        if ($followResult && mysqli_num_rows($followResult) > 0) {
+                            // The user is already being followed, disable the button
+                            echo '<button disabled style="background-color: #D9D9D9; color: gray;">Follow</button>';
+
+                        } else {
+                            // The user is not being followed, enable the button
+                            echo '<form method="post" action="' . $_SERVER['PHP_SELF'] . '">';
+                            echo '<input type="hidden" name="followerID" value="' . $id . '">';
+                            echo '<input type="hidden" name="userID" value="' . $userID . '">';
+                            echo '<button type="submit" name="follow" style="cursor: pointer; background-color: var(--secondary-color); color: black; cursor: pointer;">Follow</button>';
+                            echo '</form>';
+                        }
+                        ?>
                         <?php if ($this_user_role !== "volunteer") : ?>
                             <a href="request-create.php?userID=<?php echo $userID; ?>">
                                 <button class="book">Book Service</button>
                             </a>
                         <?php endif; ?>
                     </div>
+
                 </div>
 
                 <!-- service experience -->
@@ -277,8 +303,6 @@ mysqli_close($conn);
                                 // No rows found in the database
                                 echo '<tr><td colspan="7">No data available</td></tr>';
                             }
-
-
 
                             // close connection
                             mysqli_free_result($result);
