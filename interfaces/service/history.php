@@ -109,7 +109,6 @@ if (!isset($id)) {
                         echo '<th>Elderly Name</th>';
                         echo '<th>Service Involved</th>';
                         echo '<th>Status</th>';
-                        // echo '<th>Rating</th>';
                         echo '</tr>';
                         echo '</thead>';
                         echo '<tbody class="table-body">';
@@ -138,7 +137,6 @@ if (!isset($id)) {
                                         echo '<td>' . $row3['firstname'] . '</td>';
                                     }
                                 } else {
-                                    // No rows found in the database
                                     echo '<tr><td colspan="7">No data available</td></tr>';
                                 }
 
@@ -167,33 +165,13 @@ if (!isset($id)) {
                                     echo '</div>';
                                     echo '</td>';
                                 } else {
-                                    // No rows found in the database
                                     echo '<tr><td colspan="7">No data available</td></tr>';
                                 }
 
                                 echo '<td>' . $row['status'] . '</td>';
-                                // echo '<td>';
-                                // if ($row['user_rating'] == 0) {
-                                //     echo '<p>No rating.</p>';
-                                // } else {
-                                //     echo '<div class="rate">';
-                                //     echo '<input type="radio" id="star5" name="rate" value="5" ' . ($row['user_rating'] == 5 ? 'checked' : '') . ' disabled />';
-                                //     echo '<label for="star5" title="text">5 stars</label>';
-                                //     echo '<input type="radio" id="star4" name="rate" value="4" ' . ($row['user_rating'] == 4 ? 'checked' : '') . ' disabled />';
-                                //     echo '<label for="star4" title="text">4 stars</label>';
-                                //     echo '<input type="radio" id="star3" name="rate" value="3" ' . ($row['user_rating'] == 3 ? 'checked' : '') . ' disabled />';
-                                //     echo '<label for="star3" title="text">3 stars</label>';
-                                //     echo '<input type="radio" id="star2" name="rate" value="2" ' . ($row['user_rating'] == 2 ? 'checked' : '') . ' disabled />';
-                                //     echo '<label for="star2" title="text">2 stars</label>';
-                                //     echo '<input type="radio" id="star1" name="rate" value="1" ' . ($row['user_rating'] == 1 ? 'checked' : '') . ' disabled />';
-                                //     echo '<label for="star1" title="text">1 star</label>';
-                                //     echo '</div>';
-                                // }
-                                // echo '</td>';
                                 echo '</tr>';
                             }
                         } else {
-                            // No rows found in the database
                             echo '<tr><td colspan="7">No data available</td></tr>';
                         }
                     }
@@ -210,7 +188,6 @@ if (!isset($id)) {
                         echo '<th>Volunteer Name</th>';
                         echo '<th>Service Involved</th>';
                         echo '<th>Status</th>';
-                        // echo '<th>Rating</th>';
                         echo '</tr>';
                         echo '</thead>';
                         echo '<tbody class="table-body">';
@@ -239,7 +216,6 @@ if (!isset($id)) {
                                         echo '<td>' . $row3['firstname'] . '</td>';
                                     }
                                 } else {
-                                    // No rows found in the database
                                     echo '<tr><td colspan="7">No data available</td></tr>';
                                 }
 
@@ -268,54 +244,13 @@ if (!isset($id)) {
                                     echo '</div>';
                                     echo '</td>';
                                 } else {
-                                    // No rows found in the database
                                     echo '<tr><td colspan="7">No data available</td></tr>';
                                 }
 
                                 echo '<td>' . $row['status'] . '</td>';
-                                // echo '<td>';
-                                // if ($row['user_rating'] == 0) {
-                                //     echo '<button id="rateButton" class="rate-button" onclick="openRatingPopup()">Rate</button>';
-
-                                //     // Update service rating
-                                //     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
-                                //         // Get the rating value from the request
-                                //         $rating = $_POST['rate-popup'];
-
-                                //         $updateServiceInvolved = "UPDATE service_request
-                                //                                 SET user_rating = '$rating'
-                                //                                 WHERE requestID = '$requestID'";
-
-                                //         if (mysqli_query($conn, $updateServiceInvolved)) {
-
-                                //             echo '<script>alert("Rating recorded.");</script>';
-                                //             // header("Location: " . $_SERVER['PHP_SELF']);
-                                //             // exit();
-
-                                //         } else {
-                                //             echo "Error storing service request: " . mysqli_error($conn);
-                                //         }
-                                //     }
-                                // } else {
-                                //     echo '<div class="rate">';
-                                //     echo '<input type="radio" id="star5" name="rate" value="5" ' . ($row['user_rating'] == 5 ? 'checked' : '') . ' disabled />';
-                                //     echo '<label for="star5" title="text">5 stars</label>';
-                                //     echo '<input type="radio" id="star4" name="rate" value="4" ' . ($row['user_rating'] == 4 ? 'checked' : '') . ' disabled />';
-                                //     echo '<label for="star4" title="text">4 stars</label>';
-                                //     echo '<input type="radio" id="star3" name="rate" value="3" ' . ($row['user_rating'] == 3 ? 'checked' : '') . ' disabled />';
-                                //     echo '<label for="star3" title="text">3 stars</label>';
-                                //     echo '<input type="radio" id="star2" name="rate" value="2" ' . ($row['user_rating'] == 2 ? 'checked' : '') . ' disabled />';
-                                //     echo '<label for="star2" title="text">2 stars</label>';
-                                //     echo '<input type="radio" id="star1" name="rate" value="1" ' . ($row['user_rating'] == 1 ? 'checked' : '') . ' disabled />';
-                                //     echo '<label for="star1" title="text">1 star</label>';
-                                //     echo '</div>';
-                                // }
-                                // echo '</td>';
                                 echo '</tr>';
                             }
                         } else {
-                            // No rows found in the database
                             echo '<tr><td colspan="7">No data available</td></tr>';
                         }
                     }
@@ -333,45 +268,8 @@ if (!isset($id)) {
         </div>
     </div>
 
-    <!-- Rating Popup
-    <form method="POST">
-        <div class="rating-popup" id="ratingPopup">
-            <div class="rating-content">
-                <div class="rate-head">
-                    <h2>Rate the Service</h2>
-                </div>
-                <div class="rate-popup">
-                    <input type="radio" id="rate5" name="rate-popup" value="5" />
-                    <label for="rate5" title="text">5 stars</label>
-                    <input type="radio" id="rate4" name="rate-popup" value="4" />
-                    <label for="rate4" title="text">4 stars</label>
-                    <input type="radio" id="rate3" name="rate-popup" value="3" />
-                    <label for="rate3" title="text">3 stars</label>
-                    <input type="radio" id="rate2" name="rate-popup" value="2" />
-                    <label for="rate2" title="text">2 stars</label>
-                    <input type="radio" id="rate1" name="rate-popup" value="1" />
-                    <label for="rate1" title="text">1 star</label>
-                </div>
-                <button type="submit" class="rate-submit" name="submitRating">Confirm</button>
-                <button class="rate-cancel" onclick="closeRatingPopup()">Cancel</button>
-            </div>
-        </div>
-    </form> -->
-
     <!-- Footer -->
     <?php include('../authentication/footer.php') ?>
 </body>
-
-<!-- <script>
-    function openRatingPopup() {
-        const ratingPopup = document.getElementById('ratingPopup');
-        ratingPopup.style.display = 'flex';
-    }
-
-    function closeRatingPopup() {
-        const ratingPopup = document.getElementById('ratingPopup');
-        ratingPopup.style.display = 'none';
-    }
-</script> -->
 
 </html>

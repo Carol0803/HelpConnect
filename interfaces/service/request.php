@@ -139,7 +139,6 @@ if (!isset($id)) {
                                         echo '<td>' . $row3['firstname'] . '</td>';
                                     }
                                 } else {
-                                    // No rows found in the database
                                     echo '<tr><td colspan="7">No data available</td></tr>';
                                 }
 
@@ -169,7 +168,6 @@ if (!isset($id)) {
                                     echo '</div>';
                                     echo '</td>';
                                 } else {
-                                    // No rows found in the database
                                     echo '<tr><td colspan="7">No data available</td></tr>';
                                 }
 
@@ -230,7 +228,6 @@ if (!isset($id)) {
                     if ($this_user_role === "elderly") {
 
                         // request table
-
                         echo '<table class="request-table">';
                         echo '<thead class="table-head">';
                         echo '<tr>';
@@ -268,7 +265,6 @@ if (!isset($id)) {
                                         echo '<td>' . $row3['firstname'] . '</td>';
                                     }
                                 } else {
-                                    // No rows found in the database
                                     echo '<tr><td colspan="7">No data available</td></tr>';
                                 }
 
@@ -297,7 +293,6 @@ if (!isset($id)) {
                                     echo '</div>';
                                     echo '</td>';
                                 } else {
-                                    // No rows found in the database
                                     echo '<tr><td colspan="7">No data available</td></tr>';
                                 }
 

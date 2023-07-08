@@ -30,7 +30,6 @@ if (isset($_GET['userID'])) {
     if ($result) {
         if (mysqli_num_rows($result) > 0) {
 
-            // retrieve volunteer data
             $row = mysqli_fetch_assoc($result);
             $name = $row['firstname'] . ' ' . $row['lastname'];
             $firstname = $row['firstname'];
@@ -67,7 +66,6 @@ if (isset($_GET['userID'])) {
 // Check if submit button is clicked
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    // Get the form inputs
     $companionship = isset($_POST['companionship']) ? 1 : 0;
     $counseling = isset($_POST['counseling']) ? 1 : 0;
     $transportation = isset($_POST['transportation']) ? 1 : 0;
@@ -77,7 +75,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $daily_living_assistance = isset($_POST['daily_living_assistance']) ? 1 : 0;
 
     $date = $_POST["service_datetime"];
-    // today's date
     $createDate = date("Y-m-d");
     $duration = $_POST["duration"];
     $description = $_POST["description"];
@@ -89,7 +86,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if (mysqli_query($conn, $createServiceRequest)) {
 
-        // Get the ID of the created record
         $serviceRequestId = mysqli_insert_id($conn);
 
         // Create service involved
@@ -98,7 +94,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
         if (mysqli_query($conn, $createServiceInvolved)) {
 
-            // Get the ID of the created service
             $serviceId = mysqli_insert_id($conn);
 
             // Update data in service_request table
@@ -295,17 +290,6 @@ mysqli_close($conn);
     });
 
     validateForm();
-
-    function togglePaymentInput() {
-        var payCheckbox = document.getElementById('payCheckbox');
-        var paymentInput = document.getElementById('paymentInput');
-
-        if (payCheckbox.checked) {
-            paymentInput.disabled = false;
-        } else {
-            paymentInput.disabled = true;
-        }
-    }
 
     function goBack() {
         var userID = <?php echo $userID; ?>;

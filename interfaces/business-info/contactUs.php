@@ -127,14 +127,8 @@ $name = $_SESSION['name'];
     </div>
 
     <!--Footer-->
+    <?php include('../authentication/footer.php') ?>
 
-    <!-- header -->
-    <?php include('footer.php') ?>
-    <!-- <footer id="footer" class="footer">
-            <div id='copyright' class='copyright'>
-                ©2023 HelpConnect. All right reserved. 
-            </div>
-        </footer> -->
 
 </body>
 

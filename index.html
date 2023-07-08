@@ -5,8 +5,8 @@
     <title>Help Connect</title>
 
     <!-- import custom css -->
-    <link rel="stylesheet" href="/Project/styles/main.css" type="text/css">
-    <link rel="stylesheet" href="/Project/styles/index.css" type="text/css">
+    <link rel="stylesheet" href=" ./styles/main.css" type="text/css">
+    <link rel="stylesheet" href="./styles/index.css" type="text/css">
 
 </head>
 
@@ -14,14 +14,14 @@
 
     <header class="header" style="padding-left: 100px;">
 
-        <img src="/Project/assets/logo.svg" alt="logo" height="55px">
+        <img src="./assets/logo.svg" alt="logo" height="55px">
 
         <!-- menu -->
         <nav class="menu">
-            <a href="/Project/interfaces/business-info/aboutUs.php">Home</a>
-            <a href="/Project/interfaces/authentication/login.php">Service</a>
-            <a href="/Project/interfaces/authentication/login.php">Community</a>
-            <a href="/Project/interfaces/authentication/login.php">Profile</a>
+            <a href="./interfaces/business-info/aboutUs.php">Home</a>
+            <a href="./interfaces/authentication/login.php">Service</a>
+            <a href="./interfaces/authentication/login.php">Community</a>
+            <a href="./interfaces/authentication/login.php">Profile</a>
         </nav>
 
     </header>
@@ -38,21 +38,20 @@
                     positive impact it can have on our physical and emotional well-being. Join our community today!</p>
                 
                     <div class="button-container">
-                    <a href="/Project/interfaces/authentication/register.php"><button class="signup-button">Sign Up</button></a>
-                    <a href="/Project/interfaces/authentication/login.php"><button class="login-button">Login</button></a>
+                    <a href="./interfaces/authentication/register.php"><button class="signup-button">Sign Up</button></a>
+                    <a href="./interfaces/authentication/login.php"><button class="login-button">Login</button></a>
                 </div>
             </div>
 
             <div class="picture-container">
-                <img src="/Project/assets/dashboard-picture.png" alt="Image description">
+                <img src="./assets/dashboard-picture.png" alt="Image description">
             </div>
 
 
     </section>
 
-    <div class="footer">
-        <p>©2023 HelpConnect. All right reserved.</p>
-    </div>
+    <!-- Footer -->
+    <?php include('./authentication/footer.php') ?>
 
 </body>
 

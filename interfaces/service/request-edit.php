@@ -100,8 +100,6 @@ if (isset($_GET['requestID'])) {
             echo "User not found";
         }
 
-        // mysqli_free_result($result);
-
     } else {
         echo "Error executing query: " . mysqli_error($conn);
     }
@@ -112,7 +110,6 @@ if (isset($_GET['requestID'])) {
 // Check if submit button is clicked
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
-    // Get the form inputs
     $companionship = isset($_POST['companionship']) ? 1 : 0;
     $counseling = isset($_POST['counseling']) ? 1 : 0;
     $transportation = isset($_POST['transportation']) ? 1 : 0;
@@ -308,34 +305,21 @@ mysqli_close($conn);
 </body>
 
 <script>
-    function togglePaymentInput() {
-        var payCheckbox = document.getElementById('payCheckbox');
-        var paymentInput = document.getElementById('paymentInput');
-
-        if (payCheckbox.checked) {
-            paymentInput.disabled = false;
-        } else {
-            paymentInput.disabled = true;
-        }
-    }
-
     function goBack() {
         window.location.href = "request.php";
     }
 
     function toggleSubmitButton() {
         var submitButton = document.getElementById('submitButton');
-        submitButton.disabled = false; // Enable the submit button
+        submitButton.disabled = false;
 
         var formInputs = document.querySelectorAll('#serviceRequestForm input, #serviceRequestForm textarea');
         for (var i = 0; i < formInputs.length; i++) {
             if (formInputs[i].defaultValue !== formInputs[i].value) {
-                // Changes detected, keep the submit button enabled
                 return;
             }
         }
 
-        // No changes detected, disable the submit button
         submitButton.disabled = true;
     }
 </script>

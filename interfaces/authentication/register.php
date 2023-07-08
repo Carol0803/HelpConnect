@@ -46,14 +46,13 @@ if (isset($_POST['submit'])) {
             $result = mysqli_query($conn, $query);
 
             if ($result) {
-               $userID = mysqli_insert_id($conn); // Retrieve the userID
+               $userID = mysqli_insert_id($conn); 
 
                $serviceNeeded = "INSERT INTO service (companionship, counseling, transportation, respite_care, medical_care, hospice_care, daily_living_assistance, userID)
                            VALUES ('$companionship','$counseling','$transportation','$respite_care','$medical_care','$hospice_care','$daily_living_assistance','$userID')";
 
                if (mysqli_query($conn, $serviceNeeded)) {
                   echo "<script>alert('Account created.'); window.location.href = 'login.php';</script>";
-                  // exit();
                } else {
                   echo "<script>alert('Error: " . mysqli_error($conn) . "');</script>";
                }
@@ -80,7 +79,7 @@ if (isset($_POST['submit'])) {
             $result = mysqli_query($conn, $query);
 
             if ($result) {
-               $userID = mysqli_insert_id($conn); // Retrieve the userID
+               $userID = mysqli_insert_id($conn); 
 
                $serviceNeeded = "INSERT INTO service (companionship, counseling, transportation, respite_care, medical_care, hospice_care, daily_living_assistance, userID)
                            VALUES ('$companionship','$counseling','$transportation','$respite_care','$medical_care','$hospice_care','$daily_living_assistance','$userID')";
@@ -88,7 +87,6 @@ if (isset($_POST['submit'])) {
                if (mysqli_query($conn, $serviceNeeded)) {
                   echo "<script>alert('Account created.'); window.location.href = 'login.php';</script>";
 
-                  // exit();
                } else {
                   echo "<script>alert('Error: " . mysqli_error($conn) . "');</script>";
                }
@@ -131,8 +129,6 @@ mysqli_close($conn);
       <!-- logo -->
       <img src="../../assets/logo.svg" alt="logo" height="65px">
 
-      <!-- <form id="registerForm" method="POST"> -->
-      <!-- <form id="signupForm" action="" method="post" onsubmit="submitForm(event)"> -->
       <form id="signupForm" action="" method="post" onsubmit="submitForm(event)">
          <h3>SIGN UP</h3>
          <p>Already have an account? <a href="./login.php">Login</a></p>
@@ -425,13 +421,11 @@ mysqli_close($conn);
       }
    }
 
-   // Add event listeners to form elements
    var formElements = document.querySelectorAll('input[type="text"], input[type="email"], input[type="number"], input[type="date"], input[type="radio"]');
    formElements.forEach(function(element) {
       element.addEventListener('input', validateForm);
    });
 
-   // validate addrPassForm
    function validateAddrPassForm() {
       var address1 = document.getElementById('address1').value;
       var address2 = document.getElementById('address2').value;

@@ -107,7 +107,7 @@ if (!isset($id)) {
                     include('../../database/connect.php');
 
                     // fetch user data
-                    $users = array(); // Array to store fetched users
+                    $users = array();
 
                     if ($this_user_role === "elderly") {
                         $sql = "SELECT * FROM user WHERE role = 'volunteer'";
@@ -121,7 +121,7 @@ if (!isset($id)) {
                                 $user['birthdate'] = $row['birthdate'];
                                 $user['age'] = calculateAge($row['birthdate']);
                                 $user['gender'] = $row['gender'];
-                                $users[] = $user; // Add user to the array
+                                $users[] = $user;
                             }
                         }
                     }
@@ -138,7 +138,7 @@ if (!isset($id)) {
                                 $user['birthdate'] = $row['birthdate'];
                                 $user['age'] = calculateAge($row['birthdate']);
                                 $user['gender'] = $row['gender'];
-                                $users[] = $user; // Add user to the array
+                                $users[] = $user; 
                             }
                         }
                     }

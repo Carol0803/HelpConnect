@@ -25,17 +25,13 @@ if (isset($_GET['userID'])) {
 
     if ($result) {
         if (mysqli_num_rows($result) > 0) {
-
-            // retrieve user data
             $row = mysqli_fetch_assoc($result);
             $username = $row['firstname'] . ' ' . $row['lastname'];
             $birthdate = $row['birthdate'];
             $gender = $row['gender'];
             $location = $row['city'] . ', ' . $row['state'];
             $skills = $row['skill'];
-            // $rating = $row['rating'];
         } else {
-            // No user found with the provided ID
             echo "User not found";
         }
 
@@ -46,7 +42,6 @@ if (isset($_GET['userID'])) {
         echo "Error executing query: " . mysqli_error($conn);
     }
 } else {
-    // No userID parameter provided in the URL
     echo "Invalid request";
 }
 
@@ -59,10 +54,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['follow'])) {
     $checkResult = mysqli_query($conn, $checkQuery);
 
     if ($checkResult && mysqli_num_rows($checkResult) > 0) {
-        // The pair already exists, do not insert into the follow table
         echo "<script>alert('You are already following this user.');</script>";
     } else {
-        // The pair does not exist, insert into the follow table
         $insertQuery = "INSERT INTO follower (followerID, userID) VALUES ('$followerID', '$userID')";
         $insertResult = mysqli_query($conn, $insertQuery);
 
@@ -170,7 +163,6 @@ mysqli_close($conn);
 
                         </div>
 
-
                         <h3><strong>Age: </strong> <?php echo $birthdate; ?></h3>
                         <h3><strong>Gender: </strong> <?php echo $gender; ?></h3>
                         <h3><strong>Location: </strong><?php echo $location; ?></h3>
@@ -217,12 +209,11 @@ mysqli_close($conn);
                         // Check if the user is already being followed
                         $followQuery = "SELECT * FROM follower WHERE followerID = '$id' AND userID = '$userID'";
                         $followResult = mysqli_query($conn, $followQuery);
+                        
                         if ($followResult && mysqli_num_rows($followResult) > 0) {
-                            // The user is already being followed, disable the button
                             echo '<button disabled style="background-color: #D9D9D9; color: gray;">Follow</button>';
 
                         } else {
-                            // The user is not being followed, enable the button
                             echo '<form method="post" action="' . $_SERVER['PHP_SELF'] . '">';
                             echo '<input type="hidden" name="followerID" value="' . $id . '">';
                             echo '<input type="hidden" name="userID" value="' . $userID . '">';
@@ -295,12 +286,10 @@ mysqli_close($conn);
                                         echo '</div>';
                                         echo '</td>';
                                     } else {
-                                        // No rows found in the database
                                         echo '<tr><td colspan="7">No data available</td></tr>';
                                     }
                                 }
                             } else {
-                                // No rows found in the database
                                 echo '<tr><td colspan="7">No data available</td></tr>';
                             }
 
@@ -312,15 +301,8 @@ mysqli_close($conn);
                         </tbody>
                     </table>
                 </div>
-
-                <!-- feed -->
-                <div>
-
-                </div>
-
             </div>
         </div>
-
     </div>
 
     <!-- Footer -->

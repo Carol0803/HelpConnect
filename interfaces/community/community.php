@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($action === "post") {
         $post_content = $_POST["textArea"];
         $userID = $id;
-        // Perform the post action
+
         $query = "INSERT INTO `post` (post_content, datetime, userID) VALUES ('$post_content', '$datetime', '$userID')";
         $result = mysqli_query($conn, $query);
 
@@ -36,7 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "<script>alert('Error: " . mysqli_error($conn) . "');</script>";
         }
     } else if ($action === "like") {
-        // Perform the like action
+
         $postid = $_POST["postID"];
 
         $query = "INSERT INTO `likes` (postID, datetime, userID) VALUES ('$postid', '$datetime', '$id')";
@@ -47,7 +47,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo "<script>alert('Error: " . mysqli_error($conn) . "');</script>";
         }
     } else if ($action === "comment") {
-        // Perform the comment action
+
         $comment = $_POST["comment"];
         $postid = $_POST["postID"];
 
@@ -60,7 +60,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 }
-
 
 // Close the database connection
 mysqli_close($conn);
@@ -104,7 +103,7 @@ mysqli_close($conn);
             var commentContainer = postElement.querySelector('.comment-container');
 
             if (commentContainer) {
-                commentContainer.remove(); // Remove the comment input container if it already exists
+                commentContainer.remove(); 
             } else {
                 commentContainer = document.createElement('div');
                 commentContainer.classList.add('comment-container');
@@ -146,7 +145,7 @@ mysqli_close($conn);
                 commentContainer.appendChild(commentInput);
                 commentContainer.appendChild(commentButton);
 
-                postElement.appendChild(commentContainer); // Add the comment input container
+                postElement.appendChild(commentContainer); 
             }
         }
 
@@ -189,8 +188,8 @@ mysqli_close($conn);
             var commentContainer = postElement.querySelector('.comment-container');
             commentContainer.parentNode.insertBefore(comment, commentContainer);
 
-            commentInput.value = ''; // Clear the comment input
-            commentContainer.remove(); // Remove the comment input container
+            commentInput.value = ''; 
+            commentContainer.remove(); 
         }
     </script>
 </head>
@@ -272,7 +271,6 @@ mysqli_close($conn);
 
                 include('../../database/connect.php');
 
-                // $query = "SELECT * FROM post WHERE userID = '$id' ORDER BY datetime DESC";
                 $query = "SELECT * FROM post WHERE userID = '$id' OR userID IN (SELECT userID FROM follower WHERE followerID = '$id') ORDER BY datetime DESC";
 
                 $result = mysqli_query($conn, $query);
@@ -283,7 +281,6 @@ mysqli_close($conn);
                         $postContent = $row['post_content'];
                         $datetime = $row['datetime'];
 
-                        // Start generating the HTML structure for each post
                         echo '<div>';
                         echo '<div class="post-content">';
 
@@ -299,14 +296,6 @@ mysqli_close($conn);
                         // Post content section
                         echo '<div style="padding-left: 10px;">';
                         echo '<p>' . $postContent . '</p>';
-
-                        // Images section
-                        // echo '<div>';
-                        // while ($imageRow = mysqli_fetch_assoc($imageResult)) {
-                        //     $imageURL = $imageRow['image_url'];
-                        //     echo '<img src="' . $imageURL . '" alt="post-image" class="post-image">';
-                        // }
-                        // echo '</div>';
 
                         echo '</div>';
                         echo '<hr>';
@@ -328,14 +317,14 @@ mysqli_close($conn);
 
                         echo '<button id="like-button-' . $postID . '" class="like-button" onclick="likePost(' . $postID . ')"';
                         if ($isLiked) {
-                            echo ' disabled'; // Disable the button if the post is liked
+                            echo ' disabled'; 
                         }
                         echo '>';
                         echo '<img src="../../assets/';
                         if ($isLiked) {
-                            echo 'liked.svg'; // Change the image source to the liked image
+                            echo 'liked.svg'; 
                         } else {
-                            echo 'like.svg'; // Use the default like image
+                            echo 'like.svg'; 
                         }
                         echo '" alt="like" height="27px" width="27px">';
                         echo '</button>';

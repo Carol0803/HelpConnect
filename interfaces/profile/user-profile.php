@@ -25,7 +25,6 @@ $result = mysqli_query($conn, $query);
 
 if ($result) {
     if (mysqli_num_rows($result) > 0) {
-
         // retrieve user data
         $row = mysqli_fetch_assoc($result);
         $name = $row['firstname'] . ' ' . $row['lastname'];
@@ -58,11 +57,8 @@ if ($result) {
 // Retrieve service data
 $serviceQuery = "SELECT * FROM service WHERE userID = '$id'";
 $serviceResult = mysqli_query($conn, $serviceQuery);
-
-// Fetch service data
 $serviceRow = mysqli_fetch_assoc($serviceResult);
 
-// Store the service values in an array
 $services = [
     'companionship' => $serviceRow['companionship'],
     'daily_living_assistance' => $serviceRow['daily_living_assistance'],
@@ -88,9 +84,7 @@ if (isset($_POST['submit'])) {
     $country = $_POST['country'];
     $available_time = $_POST['available-time'];
     $skill = $_POST['skill'];
-    // $health_condition = $_POST['health'];
 
-    // construct the SQL update query
     $query = "UPDATE user SET 
     firstname='$firstname', 
     lastname='$lastname', 
@@ -107,7 +101,6 @@ if (isset($_POST['submit'])) {
     health_condition='$health_condition' 
     WHERE userID='$id'";
 
-    // execute the query
     if (mysqli_query($conn, $query)) {
 
         // register for elderly
@@ -133,7 +126,6 @@ if (isset($_POST['submit'])) {
             $result = mysqli_query($conn, $query);
 
             if ($result) {
-                // data updated successfully
                 echo "<script>alert('Data updated successfully!');</script>";
             } else {
                 echo "<script>alert('Error: " . mysqli_error($conn) . "');</script>";
@@ -163,14 +155,12 @@ if (isset($_POST['submit'])) {
             $result = mysqli_query($conn, $query);
 
             if ($result) {
-                // data updated successfully
                 echo "<script>alert('Data updated successfully!');</script>";
             } else {
                 echo "<script>alert('Error: " . mysqli_error($conn) . "');</script>";
             }
         }
     } else {
-        // an error occurred
         echo "Error updating data: " . mysqli_error($conn);
     }
 }
@@ -316,7 +306,6 @@ mysqli_close($conn);
                         <?php if ($this_user_role === 'elderly') { ?>
 
                             <div class="elderly-input">
-                                <!-- <div class="elderly-input" style="display: none;"> -->
                                 <p>Health Condition:</p>
                                 <div class="radiobutton-health">
                                     <div>

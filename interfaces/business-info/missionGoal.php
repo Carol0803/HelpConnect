@@ -87,7 +87,6 @@ $name = $_SESSION['name'];
 
             <div id='frame8' class='frame8'>
                 <div id='frame81' class='frame81'>
-                    <!--<div id='rectangle2' class='rectangle2'></div>-->
                     <div id='frame811' class='frame811'>
                         <div id='title' class='title' style="color: var(--primary-color);">Vision</div>
                         <div id='text1' class='text1'>
@@ -98,7 +97,6 @@ $name = $_SESSION['name'];
                     </div>
                 </div>
                 <div id='frame82' class='frame82'>
-                    <!--<div id='rectangle22' class='rectangle22'></div>-->
                     <div id='frame821' class='frame821'>
                         <div id='title2' class='title2' style="color: var(--primary-color);">Mission</div>
                         <div id='text2' class='text2'>
@@ -111,7 +109,6 @@ $name = $_SESSION['name'];
                     </div>
                 </div>
                 <div id='frame83' class='frame83'>
-                    <!--<div id='rectangle23' class='rectangle23'></div>-->
                     <div id='frame831' class='frame831'>
                         <div id='title3' class='title3' style="color: var(--primary-color);">Goals</div>
                         <div id='text3' class='text3'>
@@ -128,13 +125,7 @@ $name = $_SESSION['name'];
     </div>
 
     <!--Footer-->
-    <!-- header -->
-    <?php include('footer.php') ?>
-    <!-- <footer id="footer" class="footer">
-            <div id='copyright' class='copyright'>
-                ©2023 HelpConnect. All right reserved. 
-            </div>
-        </footer> -->
+    <?php include('../authentication/footer.php') ?>
 
 </body>
 

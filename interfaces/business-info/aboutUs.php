@@ -47,11 +47,11 @@ $name = $_SESSION['name'];
             </nav>
 
             <button class="avatar-button fas" type="button" onclick="toggleAvatar()">
-            <img src="../../assets/profile-icon.svg" alt="profile" class="avatar-text">
+                <img src="../../assets/profile-icon.svg" alt="profile" class="avatar-text">
             </button>
 
-             <!-- User Details Box -->
-             <div id="userDetails" class="user-box" style="z-index: 999;">
+            <!-- User Details Box -->
+            <div id="userDetails" class="user-box" style="z-index: 999;">
                 <p class="role" style="text-transform: capitalize;"><?php echo $role; ?></p>
                 <p><strong>Username: </strong><?php echo $name; ?></p>
                 <p><strong>Email: </strong><?php echo $email; ?></p>
@@ -94,8 +94,7 @@ $name = $_SESSION['name'];
                 <div id='text3' class='text3'>
                     Founded in 2020, HelpConnect is a organisation that helps senior citizens, caretakers, guardians and volunteers
                     to communicate with each other. First started as an offline facility and with only 30 staffs. Now, HelpConnect have
-                    widen their platform to online service. With this expansion, HelpConnect has gain over 150 staffs including verified
-                    volunteers.
+                    widen their platform to online service. In addition to the expansion, HelpConnect has now crossed over with <span><a href="https://rumahkasih.org/">Rumah Kasih</a></span>, another organization with a similar mission.
                 </div>
 
                 <div class="rectangle">
@@ -117,11 +116,6 @@ $name = $_SESSION['name'];
 
     <!--Footer-->
     <?php include('../authentication/footer.php') ?>
-    <!-- <footer id="footer" class="footer">
-            <div id='copyright' class='copyright'>
-                ©2023 HelpConnect. All right reserved. 
-            </div>
-        </footer> -->
 
 </body>
 

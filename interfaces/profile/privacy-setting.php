@@ -53,12 +53,9 @@ if (isset($_POST['submit'])) {
             password='$newPassword'
             WHERE userID='$id'";
 
-            // execute the query
             if (mysqli_query($conn, $query)) {
-                // data updated successfully
                 echo "<script>alert('Data updated successfully!');</script>";
             } else {
-                // an error occurred
                 echo "Error updating data: " . mysqli_error($conn);
             }
         } else {
