@@ -1,10 +1,10 @@
 body{
     background: #ffffff;
-    overflow: hidden; /* Hide horizontal scrollbar */
+    overflow: auto;
 }
 .frame5
 {
-    height:898px;
+    height:fit-content;
     width:1440px;
     padding-left:50px;
     padding-right:50px;
@@ -18,7 +18,7 @@ body{
 }
 .frame6
 {
-    height:898px;
+    height:fit-content;
     width:180px;
     align-self:flex-start;
     left:50px;
@@ -138,7 +138,7 @@ body{
 }
 .frame7
 {
-height:898px;
+height:85vh;
 width:1148px;
 padding-left:50px;
 padding-right:50px;

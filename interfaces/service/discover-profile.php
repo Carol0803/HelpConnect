@@ -209,10 +209,9 @@ mysqli_close($conn);
                         // Check if the user is already being followed
                         $followQuery = "SELECT * FROM follower WHERE followerID = '$id' AND userID = '$userID'";
                         $followResult = mysqli_query($conn, $followQuery);
-                        
+
                         if ($followResult && mysqli_num_rows($followResult) > 0) {
                             echo '<button disabled style="background-color: #D9D9D9; color: gray;">Follow</button>';
-
                         } else {
                             echo '<form method="post" action="' . $_SERVER['PHP_SELF'] . '">';
                             echo '<input type="hidden" name="followerID" value="' . $id . '">';
@@ -249,49 +248,98 @@ mysqli_close($conn);
                             // connect db
                             include('../../database/connect.php');
 
-                            // fetch data
-                            $sql = "SELECT * FROM service_request";
-                            $result = mysqli_query($conn, $sql);
+                            if ($this_user_role === "elderly") {
+                                // fetch data
+                                $sql = "SELECT * FROM service_request WHERE volunteer_involved = '$userID' AND status = 'Accepted'";
+                                $result = mysqli_query($conn, $sql);
 
-                            if (mysqli_num_rows($result) > 0) {
+                                if (mysqli_num_rows($result) > 0) {
 
-                                while ($row = mysqli_fetch_assoc($result)) {
-                                    echo '<tr>';
-                                    $serviceDatetime = date('Y-m-d h:i A', strtotime($row['service_datetime']));
-                                    echo '<td>' . $serviceDatetime . '</td>';
-                                    echo '<td>' . $row['duration'] . '</td>';
-                                    $requestID = $row['requestID'];
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                        echo '<tr>';
+                                        $serviceDatetime = date('Y-m-d h:i A', strtotime($row['service_datetime']));
+                                        echo '<td>' . $serviceDatetime . '</td>';
+                                        echo '<td>' . $row['duration'] . '</td>';
+                                        $requestID = $row['requestID'];
 
-                                    // fetch service involved
-                                    $sql2 = "SELECT companionship,counseling,transportation,respite_care,medical_care,hospice_care,daily_living_assistance FROM service WHERE requestID = '$requestID'";
-                                    $result2 = mysqli_query($conn, $sql2);
+                                        // fetch service involved
+                                        $sql2 = "SELECT companionship,counseling,transportation,respite_care,medical_care,hospice_care,daily_living_assistance FROM service WHERE requestID = '$requestID'";
+                                        $result2 = mysqli_query($conn, $sql2);
 
-                                    if (mysqli_num_rows($result2) > 0) {
+                                        if (mysqli_num_rows($result2) > 0) {
 
-                                        echo '<td>';
-                                        echo '<div class="service-expereince">';
-                                        $colors = array('#FAD2E1', '#FFD8B5', '#FFEFD1', '#D4F1F4', '#B5EAD7', '#F3D6E4', '#C7E9FF');
-                                        shuffle($colors);
+                                            echo '<td>';
+                                            echo '<div class="service-expereince">';
+                                            $colors = array('#FAD2E1', '#FFD8B5', '#FFEFD1', '#D4F1F4', '#B5EAD7', '#F3D6E4', '#C7E9FF');
+                                            shuffle($colors);
 
-                                        while ($row2 = mysqli_fetch_assoc($result2)) {
-                                            foreach ($row2 as $columnName => $value) {
-                                                if ($value == 1) {
-                                                    $randomColor = array_shift($colors);
-                                                    echo '<p style="background-color: ' . $randomColor . ';">';
-                                                    echo $columnName;
-                                                    echo '</p>';
+                                            while ($row2 = mysqli_fetch_assoc($result2)) {
+                                                foreach ($row2 as $columnName => $value) {
+                                                    if ($value == 1) {
+                                                        $randomColor = array_shift($colors);
+                                                        echo '<p style="background-color: ' . $randomColor . ';">';
+                                                        echo $columnName;
+                                                        echo '</p>';
+                                                    }
                                                 }
                                             }
+                                            echo '</div>';
+                                            echo '</td>';
+                                        } else {
+                                            echo '<tr><td colspan="7">No data available</td></tr>';
                                         }
-                                        echo '</div>';
-                                        echo '</td>';
-                                    } else {
-                                        echo '<tr><td colspan="7">No data available</td></tr>';
                                     }
+                                } else {
+                                    echo '<tr><td colspan="7">No data available</td></tr>';
                                 }
-                            } else {
-                                echo '<tr><td colspan="7">No data available</td></tr>';
                             }
+
+                            if ($this_user_role === "volunteer") {
+                                // fetch data
+                                $sql = "SELECT * FROM service_request WHERE elderly_involved = '$userID' AND status = 'Accepted'";
+                                $result = mysqli_query($conn, $sql);
+
+                                if (mysqli_num_rows($result) > 0) {
+
+                                    while ($row = mysqli_fetch_assoc($result)) {
+                                        echo '<tr>';
+                                        $serviceDatetime = date('Y-m-d h:i A', strtotime($row['service_datetime']));
+                                        echo '<td>' . $serviceDatetime . '</td>';
+                                        echo '<td>' . $row['duration'] . '</td>';
+                                        $requestID = $row['requestID'];
+
+                                        // fetch service involved
+                                        $sql2 = "SELECT companionship,counseling,transportation,respite_care,medical_care,hospice_care,daily_living_assistance FROM service WHERE requestID = '$requestID'";
+                                        $result2 = mysqli_query($conn, $sql2);
+
+                                        if (mysqli_num_rows($result2) > 0) {
+
+                                            echo '<td>';
+                                            echo '<div class="service-expereince">';
+                                            $colors = array('#FAD2E1', '#FFD8B5', '#FFEFD1', '#D4F1F4', '#B5EAD7', '#F3D6E4', '#C7E9FF');
+                                            shuffle($colors);
+
+                                            while ($row2 = mysqli_fetch_assoc($result2)) {
+                                                foreach ($row2 as $columnName => $value) {
+                                                    if ($value == 1) {
+                                                        $randomColor = array_shift($colors);
+                                                        echo '<p style="background-color: ' . $randomColor . ';">';
+                                                        echo $columnName;
+                                                        echo '</p>';
+                                                    }
+                                                }
+                                            }
+                                            echo '</div>';
+                                            echo '</td>';
+                                        } else {
+                                            echo '<tr><td colspan="7">No data available</td></tr>';
+                                        }
+                                    }
+                                } else {
+                                    echo '<tr><td colspan="7">No data available</td></tr>';
+                                }
+                            }
+
 
                             // close connection
                             mysqli_free_result($result);

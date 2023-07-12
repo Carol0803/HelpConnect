@@ -103,7 +103,7 @@ mysqli_close($conn);
             var commentContainer = postElement.querySelector('.comment-container');
 
             if (commentContainer) {
-                commentContainer.remove(); 
+                commentContainer.remove();
             } else {
                 commentContainer = document.createElement('div');
                 commentContainer.classList.add('comment-container');
@@ -145,7 +145,7 @@ mysqli_close($conn);
                 commentContainer.appendChild(commentInput);
                 commentContainer.appendChild(commentButton);
 
-                postElement.appendChild(commentContainer); 
+                postElement.appendChild(commentContainer);
             }
         }
 
@@ -188,8 +188,8 @@ mysqli_close($conn);
             var commentContainer = postElement.querySelector('.comment-container');
             commentContainer.parentNode.insertBefore(comment, commentContainer);
 
-            commentInput.value = ''; 
-            commentContainer.remove(); 
+            commentInput.value = '';
+            commentContainer.remove();
         }
     </script>
 </head>
@@ -280,89 +280,99 @@ mysqli_close($conn);
                         $postID = $row['postID'];
                         $postContent = $row['post_content'];
                         $datetime = $row['datetime'];
+                        $psotUserID = $row['userID'];
 
                         echo '<div>';
                         echo '<div class="post-content">';
 
-                        // User section
-                        echo '<div class="post-user">';
-                        echo '<button class="avatar-button">';
-                        echo '<img src="../../assets/profile-icon.svg" alt="profile">';
-                        echo '</button>';
-                        echo '<h3>' . $name . '</h3>';
-                        echo '<p>' . $datetime . '</p>';
-                        echo '</div>';
+                        $query5 = "SELECT * FROM user WHERE userID = '$psotUserID'";
+                        $result5 = mysqli_query($conn, $query5);
 
-                        // Post content section
-                        echo '<div style="padding-left: 10px;">';
-                        echo '<p>' . $postContent . '</p>';
+                        if ($result5 && mysqli_num_rows($result5) > 0) {
+                            while ($post_userRow = mysqli_fetch_assoc($result5)) {
+                                $post_username = $post_userRow['firstname'] . ' ' . $post_userRow['lastname'];
 
-                        echo '</div>';
-                        echo '<hr>';
-                        echo '<div style="display:flex; flex-direction:row; align-items: center;">';
+                                // User section
+                                echo '<div class="post-user">';
+                                echo '<button class="avatar-button">';
+                                echo '<img src="../../assets/profile-icon.svg" alt="profile">';
+                                echo '</button>';
+                                echo '<h3>' . $post_username . '</h3>';
+                                echo '<p>' . $datetime . '</p>';
+                                echo '</div>';
 
-                        // like button
-                        $likeQuery = "SELECT COUNT(*) AS likeCount FROM likes WHERE postID = '$postID'";
-                        $likeResult = mysqli_query($conn, $likeQuery);
-                        $likeRow = mysqli_fetch_assoc($likeResult);
-                        $likeCount = $likeRow['likeCount'];
+                                // Post content section
+                                echo '<div style="padding-left: 10px;">';
+                                echo '<p>' . $postContent . '</p>';
 
-                        $likedQuery = "SELECT * FROM likes WHERE postID = '$postID' AND userID = '$id'";
-                        $likedResult = mysqli_query($conn, $likedQuery);
-                        $isLiked = false;
+                                echo '</div>';
+                                echo '<hr>';
+                                echo '<div style="display:flex; flex-direction:row; align-items: center;">';
 
-                        if ($likedResult && mysqli_num_rows($likedResult) > 0) {
-                            $isLiked = true;
-                        }
+                                // like button
+                                $likeQuery = "SELECT COUNT(*) AS likeCount FROM likes WHERE postID = '$postID'";
+                                $likeResult = mysqli_query($conn, $likeQuery);
+                                $likeRow = mysqli_fetch_assoc($likeResult);
+                                $likeCount = $likeRow['likeCount'];
 
-                        echo '<button id="like-button-' . $postID . '" class="like-button" onclick="likePost(' . $postID . ')"';
-                        if ($isLiked) {
-                            echo ' disabled'; 
-                        }
-                        echo '>';
-                        echo '<img src="../../assets/';
-                        if ($isLiked) {
-                            echo 'liked.svg'; 
-                        } else {
-                            echo 'like.svg'; 
-                        }
-                        echo '" alt="like" height="27px" width="27px">';
-                        echo '</button>';
-                        echo '<span style="font-size: 18px; padding-bottom: 5px;" id="like-count-' . $postID . '">' . $likeCount . ' like</span>';
+                                $likedQuery = "SELECT * FROM likes WHERE postID = '$postID' AND userID = '$id'";
+                                $likedResult = mysqli_query($conn, $likedQuery);
+                                $isLiked = false;
 
-                        // comment button
-                        echo '<button class="comment-button" onclick="commentPost(this, ' . $postID . ')"><img src="../../assets/comment.svg" alt="bold" height="24px" width="24px"></button>';
+                                if ($likedResult && mysqli_num_rows($likedResult) > 0) {
+                                    $isLiked = true;
+                                }
 
-                        echo '</div>';
-                        echo '<hr>';
+                                echo '<button id="like-button-' . $postID . '" class="like-button" onclick="likePost(' . $postID . ')"';
+                                if ($isLiked) {
+                                    echo ' disabled';
+                                }
+                                echo '>';
+                                echo '<img src="../../assets/';
+                                if ($isLiked) {
+                                    echo 'liked.svg';
+                                } else {
+                                    echo 'like.svg';
+                                }
+                                echo '" alt="like" height="27px" width="27px">';
+                                echo '</button>';
+                                echo '<span style="font-size: 18px; padding-bottom: 5px;" id="like-count-' . $postID . '">' . $likeCount . ' like</span>';
 
-                        // Comments section
-                        $query2 = "SELECT * FROM comment WHERE postID = '$postID' ORDER BY datetime DESC";
-                        $result2 = mysqli_query($conn, $query2);
+                                // comment button
+                                echo '<button class="comment-button" onclick="commentPost(this, ' . $postID . ')"><img src="../../assets/comment.svg" alt="bold" height="24px" width="24px"></button>';
 
-                        if ($result2 && mysqli_num_rows($result2) > 0) {
-                            while ($row = mysqli_fetch_assoc($result2)) {
-                                $userID = $row['userID'];
-                                $comment = $row['comment_content'];
-                                $datetime = $row['datetime'];
+                                echo '</div>';
+                                echo '<hr>';
 
-                                $query3 = "SELECT * FROM user WHERE userID = '$userID'";
-                                $result3 = mysqli_query($conn, $query3);
+                                // Comments section
+                                $query2 = "SELECT * FROM comment WHERE postID = '$postID' ORDER BY datetime DESC";
+                                $result2 = mysqli_query($conn, $query2);
 
-                                if ($result3 && mysqli_num_rows($result3) > 0) {
-                                    while ($userRow = mysqli_fetch_assoc($result3)) {
-                                        $username = $userRow['firstname'] . ' ' . $userRow['lastname'];
+                                if ($result2 && mysqli_num_rows($result2) > 0) {
+                                    while ($row = mysqli_fetch_assoc($result2)) {
+                                        $userID = $row['userID'];
+                                        $comment = $row['comment_content'];
+                                        $datetime = $row['datetime'];
 
-                                        echo '<div style="padding-left: 10px;">';
-                                        echo '<p style="font-size: 18px; display:flex; flex-direction:row; align-items: center; gap: 10px;"><strong>' . $username . '</strong>  ' . $comment . ' <span style="font-size: 12px;">  ' . $datetime . '</span> </p>';
-                                        echo '</div>';
+                                        $query3 = "SELECT * FROM user WHERE userID = '$userID'";
+                                        $result3 = mysqli_query($conn, $query3);
+
+                                        if ($result3 && mysqli_num_rows($result3) > 0) {
+                                            while ($userRow = mysqli_fetch_assoc($result3)) {
+                                                $username = $userRow['firstname'] . ' ' . $userRow['lastname'];
+
+                                                echo '<div style="padding-left: 10px;">';
+                                                echo '<p style="font-size: 18px; display:flex; flex-direction:row; align-items: center; gap: 10px;"><strong>' . $username . '</strong>  ' . $comment . ' <span style="font-size: 12px;">  ' . $datetime . '</span> </p>';
+                                                echo '</div>';
+                                            }
+                                        }
                                     }
                                 }
+
+                                echo '</div>';
+                                echo '</div>';
                             }
                         }
-
-                        echo '</div>';
-                        echo '</div>';
                     }
                 } else {
                     echo '<p>No posts found.</p>';

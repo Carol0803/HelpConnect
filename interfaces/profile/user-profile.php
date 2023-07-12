@@ -72,39 +72,35 @@ $services = [
 // update data
 if (isset($_POST['submit'])) {
 
-    $firstname = $_POST['firstname'];
-    $lastname = $_POST['lastname'];
-    $gender = $_POST['gender'];
-    $contactno = $_POST['contactno'];
-    $address1 = $_POST['address1'];
-    $address2 = $_POST['address2'];
-    $city = $_POST['city'];
-    $state = $_POST['state'];
-    $postcode = $_POST['postcode'];
-    $country = $_POST['country'];
-    $available_time = $_POST['available-time'];
-    $skill = $_POST['skill'];
+    // register for elderly
+    if ($this_user_role === "elderly") {
 
-    $query = "UPDATE user SET 
-    firstname='$firstname', 
-    lastname='$lastname', 
-    gender='$gender', 
-    contact='$contactno', 
-    address='$address1', 
-    address2='$address2', 
-    city='$city', 
-    state='$state', 
-    postcode='$postcode', 
-    country='$country', 
-    available_time='$available_time', 
-    skill='$skill', 
-    health_condition='$health_condition' 
-    WHERE userID='$id'";
+        $firstname = $_POST['firstname'];
+        $lastname = $_POST['lastname'];
+        $gender = $_POST['gender'];
+        $contactno = $_POST['contactno'];
+        $address1 = $_POST['address1'];
+        $address2 = $_POST['address2'];
+        $city = $_POST['city'];
+        $state = $_POST['state'];
+        $postcode = $_POST['postcode'];
+        $country = $_POST['country'];
 
-    if (mysqli_query($conn, $query)) {
+        $query = "UPDATE user SET 
+        firstname='$firstname', 
+        lastname='$lastname', 
+        gender='$gender', 
+        contact='$contactno', 
+        address='$address1', 
+        address2='$address2', 
+        city='$city', 
+        state='$state', 
+        postcode='$postcode', 
+        country='$country', 
+        health_condition='$health_condition' 
+        WHERE userID='$id'";
 
-        // register for elderly
-        if ($this_user_role === "elderly") {
+        if (mysqli_query($conn, $query)) {
 
             $companionship = isset($_POST['companionship']) ? 1 : 0;
             $counseling = isset($_POST['counseling']) ? 1 : 0;
@@ -115,14 +111,14 @@ if (isset($_POST['submit'])) {
             $daily_living_assistance = isset($_POST['daily_living_assistance']) ? 1 : 0;
 
             $query = "UPDATE service SET 
-            companionship='$companionship', 
-            counseling='$counseling', 
-            transportation='$transportation', 
-            respite_care='$respite_care', 
-            medical_care='$medical_care', 
-            hospice_care='$hospice_care', 
-            daily_living_assistance='$daily_living_assistance'
-            WHERE userID='$id'";
+        companionship='$companionship', 
+        counseling='$counseling', 
+        transportation='$transportation', 
+        respite_care='$respite_care', 
+        medical_care='$medical_care', 
+        hospice_care='$hospice_care', 
+        daily_living_assistance='$daily_living_assistance'
+        WHERE userID='$id'";
             $result = mysqli_query($conn, $query);
 
             if ($result) {
@@ -130,10 +126,43 @@ if (isset($_POST['submit'])) {
             } else {
                 echo "<script>alert('Error: " . mysqli_error($conn) . "');</script>";
             }
+        } else {
+            echo "Error updating data: " . mysqli_error($conn);
         }
+    }
 
-        // register for volunteer
-        if ($this_user_role === "volunteer") {
+    // register for volunteer
+    if ($this_user_role === "volunteer") {
+
+        $firstname = $_POST['firstname'];
+        $lastname = $_POST['lastname'];
+        $gender = $_POST['gender'];
+        $contactno = $_POST['contactno'];
+        $address1 = $_POST['address1'];
+        $address2 = $_POST['address2'];
+        $city = $_POST['city'];
+        $state = $_POST['state'];
+        $postcode = $_POST['postcode'];
+        $country = $_POST['country'];
+        $available_time = $_POST['available-time'];
+        $skill = $_POST['skill'];
+
+        $query = "UPDATE user SET 
+        firstname='$firstname', 
+        lastname='$lastname', 
+        gender='$gender', 
+        contact='$contactno', 
+        address='$address1', 
+        address2='$address2', 
+        city='$city', 
+        state='$state', 
+        postcode='$postcode', 
+        country='$country', 
+        available_time='$available_time', 
+        skill='$skill'
+        WHERE userID='$id'";
+
+        if (mysqli_query($conn, $query)) {
 
             $companionship = isset($_POST['companionship2']) ? 1 : 0;
             $counseling = isset($_POST['counseling2']) ? 1 : 0;
@@ -144,14 +173,14 @@ if (isset($_POST['submit'])) {
             $daily_living_assistance = isset($_POST['daily_living_assistance2']) ? 1 : 0;
 
             $query = "UPDATE service SET 
-            companionship='$companionship', 
-            counseling='$counseling', 
-            transportation='$transportation', 
-            respite_care='$respite_care', 
-            medical_care='$medical_care', 
-            hospice_care='$hospice_care', 
-            daily_living_assistance='$daily_living_assistance'
-            WHERE userID='$id'";
+        companionship='$companionship', 
+        counseling='$counseling', 
+        transportation='$transportation', 
+        respite_care='$respite_care', 
+        medical_care='$medical_care', 
+        hospice_care='$hospice_care', 
+        daily_living_assistance='$daily_living_assistance'
+        WHERE userID='$id'";
             $result = mysqli_query($conn, $query);
 
             if ($result) {
@@ -159,9 +188,9 @@ if (isset($_POST['submit'])) {
             } else {
                 echo "<script>alert('Error: " . mysqli_error($conn) . "');</script>";
             }
+        } else {
+            echo "Error updating data: " . mysqli_error($conn);
         }
-    } else {
-        echo "Error updating data: " . mysqli_error($conn);
     }
 }
 

@@ -253,11 +253,11 @@ mysqli_close($conn);
 
                     <!-- date -->
                     <label for="service_datetime">Date:</label>
-                    <input type="datetime-local" id="service_datetime" name="service_datetime" value="<?php echo $service_datetime; ?>">
+                    <input type="datetime-local" id="service_datetime" name="service_datetime" value="<?php echo $service_datetime; ?>" style="width: 95%; margin-left: 7px;">
 
                     <!-- duration -->
                     <label for="duration">Duration(hours): </label>
-                    <input type="number" id="duration" name="duration" value="<?php echo $duration; ?>">
+                    <input  type="number" id="duration" name="duration" value="<?php echo $duration; ?>" >
 
                     <!-- service type -->
                     <label for="service_involved ">Service Type: </label>

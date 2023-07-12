@@ -127,7 +127,9 @@ $name = $_SESSION['name'];
     </div>
 
     <!--Footer-->
-    <?php include('../authentication/footer.php') ?>
+    <div style="z-index: 999; position: relative;">
+        <?php include('../authentication/footer.php') ?>
+    </div>
 
 
 </body>

@@ -43,7 +43,7 @@ $name = $_SESSION['name'];
                 <a href="#" class="active">Home</a>
                 <a href="../../interfaces/service/discover.php">Service</a>
                 <a href="../../interfaces/community/community.php">Community</a>
-                <a href="../../interfaces/profile/userp-rofile.php">Profile</a>
+                <a href="../../interfaces/profile/user-profile.php">Profile</a>
             </nav>
 
             <button class="avatar-button fas" type="button" onclick="toggleAvatar()">

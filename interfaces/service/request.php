@@ -136,7 +136,7 @@ if (!isset($id)) {
 
                                 if (mysqli_num_rows($result3) > 0) {
                                     while ($row3 = mysqli_fetch_assoc($result3)) {
-                                        echo '<td>' . $row3['firstname'] . '</td>';
+                                        echo '<td>' . $row3['firstname'] . ' '. $row3['lastname'] . '</td>';
                                     }
                                 } else {
                                     echo '<tr><td colspan="7">No data available</td></tr>';

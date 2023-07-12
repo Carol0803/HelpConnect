@@ -35,10 +35,11 @@
 
 /* dashboard */
 .dashboard .box-container{
-    padding: 27px 100px;
+    padding: 27px auto;
     display: flex;
     flex-direction: row;
     height: 100%;
+    max-width: 100vw;
  }
 
 .dashboard .box {
@@ -55,8 +56,8 @@
 }
  
 .picture-container img {
-    height: 600px;
-    width: 600px;
+    max-height: 600px;
+    max-width: 600px;
 }
 
 .login-button {
